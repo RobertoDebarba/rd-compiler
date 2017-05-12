@@ -7,17 +7,32 @@ public class Lexico implements Constants
 
     public Lexico()
     {
-        this("");
+        this(new java.io.StringReader(""));
     }
 
-    public Lexico(String input)
+    public Lexico(java.io.Reader input)
     {
         setInput(input);
     }
 
-    public void setInput(String input)
+    public void setInput(java.io.Reader input)
     {
-        this.input = input;
+        StringBuffer bfr = new StringBuffer();
+        try
+        {
+            int c = input.read();
+            while (c != -1)
+            {
+                bfr.append((char)c);
+                c = input.read();
+            }
+            this.input = bfr.toString();
+        }
+        catch (java.io.IOException e)
+        {
+            e.printStackTrace();
+        }
+
         setPosition(0);
     }
 
