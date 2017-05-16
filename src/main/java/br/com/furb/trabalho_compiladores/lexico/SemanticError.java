@@ -1,5 +1,4 @@
 package br.com.furb.trabalho_compiladores.lexico;
-
 public class SemanticError extends AnalysisError
 {
     public SemanticError(String msg, int position)

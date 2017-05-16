@@ -1,5 +1,4 @@
 package br.com.furb.trabalho_compiladores.lexico;
-
 public class Token
 {
     private int id;

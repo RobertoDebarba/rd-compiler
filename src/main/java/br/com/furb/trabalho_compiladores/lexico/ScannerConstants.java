@@ -1,5 +1,4 @@
 package br.com.furb.trabalho_compiladores.lexico;
-
 public interface ScannerConstants
 {
     int[] SCANNER_TABLE_INDEXES = 
@@ -1437,9 +1436,9 @@ public interface ScannerConstants
 
     String[] SCANNER_ERROR =
     {
-        "símbolo inválido",
+        "Caractere não esperado",
         "",
-        "constante caracter inválida ou não finalizada",
+        "Erro identificando constante_caracter",
         "",
         "",
         "",

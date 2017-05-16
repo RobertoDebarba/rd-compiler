@@ -73,7 +73,7 @@ public class MainWindowEvents {
 	}
 
 	static void compileOnCommandClick(JTextArea codeTextArea, JTextArea messageTextArea) {
-		/*Lexico lexico = new Lexico();
+		Lexico lexico = new Lexico();
 		lexico.setInput(codeTextArea.getText());
 
 		try {
@@ -117,7 +117,7 @@ public class MainWindowEvents {
 				messageTextArea.setText(messageTextArea.getText() + "Erro na linha " + buscarLinhaPorPosicao(codeTextArea, e.getPosition()) + " – "
 						+ e.getMessage() + "\n");
 			}
-		}*/
+		}
 	}
 
 	private static int buscarLinhaPorPosicao(JTextArea codeTextArea, int posicao) {

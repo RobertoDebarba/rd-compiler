@@ -1,5 +1,4 @@
 package br.com.furb.trabalho_compiladores.lexico;
-
 public class SyntaticError extends AnalysisError
 {
     public SyntaticError(String msg, int position)

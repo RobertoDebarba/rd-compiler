@@ -1,5 +1,4 @@
 package br.com.furb.trabalho_compiladores.lexico;
-
 import java.util.Stack;
 
 public class Sintatico implements Constants
