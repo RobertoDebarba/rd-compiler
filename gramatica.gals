@@ -7,7 +7,7 @@ ParserName = Sintatico
 SemanticName = Semantico
 ScannerCaseSensitive = false
 ScannerTable = Compact
-Input = Stream
+Input = String
 Parser = LL
 #RegularDefinitions
 acentuada: [áÁâÂãÃàÀéÉêÊíÍîÎóÓôÔõÕúÚûÛçÇ]
