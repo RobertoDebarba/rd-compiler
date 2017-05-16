@@ -19,6 +19,10 @@ import javax.swing.text.html.HTMLDocument.HTMLReader.SpecialAction;
 import br.com.furb.trabalho_compiladores.lexico.LexicalError;
 import br.com.furb.trabalho_compiladores.lexico.Lexico;
 import br.com.furb.trabalho_compiladores.lexico.ScannerConstants;
+import br.com.furb.trabalho_compiladores.lexico.SemanticError;
+import br.com.furb.trabalho_compiladores.lexico.Semantico;
+import br.com.furb.trabalho_compiladores.lexico.Sintatico;
+import br.com.furb.trabalho_compiladores.lexico.SyntaticError;
 import br.com.furb.trabalho_compiladores.lexico.Token;
 
 public class MainWindowEvents {
@@ -73,10 +77,16 @@ public class MainWindowEvents {
 	}
 
 	static void compileOnCommandClick(JTextArea codeTextArea, JTextArea messageTextArea) {
-		Lexico lexico = new Lexico();
-		lexico.setInput(codeTextArea.getText());
 
 		try {
+			Lexico lexico = new Lexico();
+			lexico.setInput(codeTextArea.getText());
+
+			Semantico semantico = new Semantico();
+
+			Sintatico sintatico = new Sintatico();
+			sintatico.parse(lexico, semantico);
+
 			String compileOutput = "";
 			compileOutput += "linha";
 			compileOutput += "\tclasse";
@@ -99,9 +109,9 @@ public class MainWindowEvents {
 					tokenClass = "constante real";
 				} else if (t.getId() == 5) {
 					tokenClass = "constante caracter";
-				} else if (t.getId() >= 6 && t.getId() < 33) {
+				} else if (t.getId() >= 6 && t.getId() < 31) {
 					tokenClass = "palavra reservada";
-				} else if (t.getId() >= 33) {
+				} else if (t.getId() >= 31) {
 					tokenClass = "símbolo especial";
 				}
 				compileOutput += tokenClass + "\t\t";
@@ -117,6 +127,12 @@ public class MainWindowEvents {
 				messageTextArea.setText(messageTextArea.getText() + "Erro na linha " + buscarLinhaPorPosicao(codeTextArea, e.getPosition()) + " – "
 						+ e.getMessage() + "\n");
 			}
+		} catch (SyntaticError e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SemanticError e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
