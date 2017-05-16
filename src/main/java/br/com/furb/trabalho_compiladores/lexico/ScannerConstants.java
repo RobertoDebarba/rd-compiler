@@ -1436,9 +1436,9 @@ public interface ScannerConstants
 
     String[] SCANNER_ERROR =
     {
-        "Caractere não esperado",
+        "símbolo inválido",
         "",
-        "Erro identificando constante_caracter",
+        "constante caracter inválida ou não finalizada",
         "",
         "",
         "",
