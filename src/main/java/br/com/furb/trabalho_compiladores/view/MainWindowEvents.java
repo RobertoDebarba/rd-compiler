@@ -14,16 +14,13 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextArea;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.swing.text.html.HTMLDocument.HTMLReader.SpecialAction;
 
 import br.com.furb.trabalho_compiladores.lexico.LexicalError;
 import br.com.furb.trabalho_compiladores.lexico.Lexico;
-import br.com.furb.trabalho_compiladores.lexico.ScannerConstants;
 import br.com.furb.trabalho_compiladores.lexico.SemanticError;
 import br.com.furb.trabalho_compiladores.lexico.Semantico;
 import br.com.furb.trabalho_compiladores.lexico.Sintatico;
 import br.com.furb.trabalho_compiladores.lexico.SyntaticError;
-import br.com.furb.trabalho_compiladores.lexico.Token;
 
 public class MainWindowEvents {
 	private static final String MSG_GERACAO_NAO_IMPLEMENTADA = "Geração de código ainda não foi implementada.";
@@ -80,58 +77,31 @@ public class MainWindowEvents {
 
 		try {
 			Lexico lexico = new Lexico();
-			lexico.setInput(codeTextArea.getText());
-
 			Semantico semantico = new Semantico();
-
 			Sintatico sintatico = new Sintatico();
+			
+			lexico.setInput(codeTextArea.getText());
 			sintatico.parse(lexico, semantico);
 
-			String compileOutput = "";
-			compileOutput += "linha";
-			compileOutput += "\tclasse";
-			compileOutput += "\t\tlexema";
-			compileOutput += System.lineSeparator();
-
-			Token t = null;
-			while ((t = lexico.nextToken()) != null) {
-
-				int counter = buscarLinhaPorPosicao(codeTextArea, t.getPosition());
-
-				compileOutput += counter + "\t";
-
-				String tokenClass = null;
-				if (t.getId() == 2) {
-					tokenClass = "identificador";
-				} else if (t.getId() == 3) {
-					tokenClass = "constante inteira";
-				} else if (t.getId() == 4) {
-					tokenClass = "constante real";
-				} else if (t.getId() == 5) {
-					tokenClass = "constante caracter";
-				} else if (t.getId() >= 6 && t.getId() < 31) {
-					tokenClass = "palavra reservada";
-				} else if (t.getId() >= 31) {
-					tokenClass = "símbolo especial";
-				}
-				compileOutput += tokenClass + "\t\t";
-				compileOutput += t.getLexeme();
-				compileOutput += System.lineSeparator();
-			}
-			messageTextArea.setText(messageTextArea.getText() + compileOutput + "\nprograma compilado com sucesso \n");
+			messageTextArea.setText(messageTextArea.getText() + "\nprograma compilado com sucesso \n");
 		} catch (LexicalError e) {
 			if (e.getMessage() == "símbolo inválido") {
-				messageTextArea.setText(messageTextArea.getText() + "Erro na linha " + buscarLinhaPorPosicao(codeTextArea, e.getPosition()) + " – "
+				messageTextArea.setText(messageTextArea.getText() + "Erro na linha "
+						+ buscarLinhaPorPosicao(codeTextArea, e.getPosition()) + " – "
 						+ codeTextArea.getText().charAt(e.getPosition()) + " " + e.getMessage() + "\n");
 			} else {
-				messageTextArea.setText(messageTextArea.getText() + "Erro na linha " + buscarLinhaPorPosicao(codeTextArea, e.getPosition()) + " – "
-						+ e.getMessage() + "\n");
+				messageTextArea.setText(messageTextArea.getText() + "Erro na linha "
+						+ buscarLinhaPorPosicao(codeTextArea, e.getPosition()) + " – " + e.getMessage() + "\n");
 			}
 		} catch (SyntaticError e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			String token = e.getToken();
+			if (token.equals("$")) {
+				token = "fim de arquivo";
+			}
+			
+			messageTextArea.setText(messageTextArea.getText() + "Erro na linha "
+					+ buscarLinhaPorPosicao(codeTextArea, e.getPosition()) + " – " + String.format(e.getMessage(), token) + "\n");
 		} catch (SemanticError e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -149,8 +119,9 @@ public class MainWindowEvents {
 	}
 
 	static void buildOnCommandClick(JTextArea messageTextArea) {
-		messageTextArea.setText(messageTextArea.getText()
-				+ (messageTextArea.getText().isEmpty() ? "" : System.lineSeparator()) + MSG_GERACAO_NAO_IMPLEMENTADA + "\n");
+		messageTextArea
+				.setText(messageTextArea.getText() + (messageTextArea.getText().isEmpty() ? "" : System.lineSeparator())
+						+ MSG_GERACAO_NAO_IMPLEMENTADA + "\n");
 	}
 
 	static void teamOnCommandClick(JTextArea messageTextArea) {
