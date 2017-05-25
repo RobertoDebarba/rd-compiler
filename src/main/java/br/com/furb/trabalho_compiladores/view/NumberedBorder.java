@@ -11,13 +11,11 @@ import javax.swing.JTextArea;
 import javax.swing.border.AbstractBorder;
 
 /**
- * retirado e adaptado de: http://www.guj.com.br/posts/list/123003.java#665398 <br>
+ * retirado e adaptado de: http://www.guj.com.br/posts/list/123003.java#665398
+ * <br>
  */
 final class NumberedBorder extends AbstractBorder {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -5089118025935944759L;
 
 	private static int lineHeight;
@@ -80,8 +78,7 @@ final class NumberedBorder extends AbstractBorder {
 	}
 }
 
-
-/* como usar com um JTextArea:
-JTextArea  = new JTextArea();
-txt.setBorder(new NumberedBorder());
-*/
+/*
+ * como usar com um JTextArea: JTextArea = new JTextArea(); txt.setBorder(new
+ * NumberedBorder());
+ */
