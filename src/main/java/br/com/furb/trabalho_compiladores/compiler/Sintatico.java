@@ -1,7 +1,7 @@
-package br.com.furb.trabalho_compiladores.lexico;
+package br.com.furb.trabalho_compiladores.compiler;
 import java.util.Stack;
 
-public class Sintatico implements Constants
+final class Sintatico implements Constants
 {
     private Stack stack = new Stack();
     private Token currentToken;

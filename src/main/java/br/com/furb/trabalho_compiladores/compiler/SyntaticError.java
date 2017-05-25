@@ -1,6 +1,6 @@
-package br.com.furb.trabalho_compiladores.lexico;
+package br.com.furb.trabalho_compiladores.compiler;
 
-public class SyntaticError extends AnalysisError {
+final class SyntaticError extends AnalysisError {
 
 	private String token;
 

@@ -1,5 +1,5 @@
-package br.com.furb.trabalho_compiladores.lexico;
-public class Token
+package br.com.furb.trabalho_compiladores.compiler;
+final class Token
 {
     private int id;
     private String lexeme;

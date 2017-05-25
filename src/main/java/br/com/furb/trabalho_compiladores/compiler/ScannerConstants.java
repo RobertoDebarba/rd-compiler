@@ -1,5 +1,5 @@
-package br.com.furb.trabalho_compiladores.lexico;
-public interface ScannerConstants
+package br.com.furb.trabalho_compiladores.compiler;
+interface ScannerConstants
 {
     int[] SCANNER_TABLE_INDEXES = 
     {

@@ -1,5 +1,5 @@
-package br.com.furb.trabalho_compiladores.lexico;
-public interface Constants extends ScannerConstants, ParserConstants
+package br.com.furb.trabalho_compiladores.compiler;
+interface Constants extends ScannerConstants, ParserConstants
 {
     int EPSILON  = 0;
     int DOLLAR   = 1;

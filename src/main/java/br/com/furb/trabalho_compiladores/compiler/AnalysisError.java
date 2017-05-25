@@ -1,5 +1,5 @@
-package br.com.furb.trabalho_compiladores.lexico;
-public class AnalysisError extends Exception
+package br.com.furb.trabalho_compiladores.compiler;
+class AnalysisError extends Exception
 {
     private int position;
 

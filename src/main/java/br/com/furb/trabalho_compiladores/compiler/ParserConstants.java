@@ -1,5 +1,5 @@
-package br.com.furb.trabalho_compiladores.lexico;
-public interface ParserConstants
+package br.com.furb.trabalho_compiladores.compiler;
+interface ParserConstants
 {
     int START_SYMBOL = 47;
 

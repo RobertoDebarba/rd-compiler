@@ -13,7 +13,7 @@ import javax.swing.border.AbstractBorder;
 /**
  * retirado e adaptado de: http://www.guj.com.br/posts/list/123003.java#665398 <br>
  */
-class NumberedBorder extends AbstractBorder {
+final class NumberedBorder extends AbstractBorder {
 
 	/**
 	 * 
