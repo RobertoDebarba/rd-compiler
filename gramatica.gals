@@ -127,7 +127,7 @@ comentario_bloco: /\*([^\*/]*|((\*)*|(/)*)[^\*/]+)*(\*)*\*/
 <fator>
 <fator_1>
 #Grammar
-<programa>::=algoritmo constante_caracter <cabecalho_modulos> <variaveis_opcional> inicio <lista_comandos> fim <lista_modulos>;
+<programa>::= #15 algoritmo constante_caracter <cabecalho_modulos> <variaveis_opcional> inicio <lista_comandos> fim #16 <lista_modulos> #17;
 <cabecalho_modulos>::=<cabecalho><cabecalho_modulos>|î;
 <variaveis_opcional>::=<variaveis>|î;
 <lista_comandos>::=<comando>";"<lista_comandos>|î;
@@ -150,9 +150,9 @@ comentario_bloco: /\*([^\*/]*|((\*)*|(/)*)[^\*/]+)*(\*)*\*/
 <variavel>::=<lista_identificadores> ":" <tipo> ";";
 <entrada_dados>::=leia "(" <lista_identificadores> ")";
 <saida_dados>::=escreva "(" <lista_valores> ")";
-<lista_valores>::=<valor><lista_valores_adicionais>;
-<lista_valores_adicionais>::="," <valor><lista_valores_adicionais>|î;
-<valor>::=<expressao>|quebra;
+<lista_valores>::=<valor> #7 <lista_valores_adicionais>;
+<lista_valores_adicionais>::="," <valor> #7 <lista_valores_adicionais>|î;
+<valor>::=<expressao>|quebra #18;
 <selecao>::=se <expressao> entao <lista_comandos> <senao_opcional> fim;
 <senao_opcional>::=senao <lista_comandos>|î;
 <repeticao>::=repita <lista_comandos> ate <expressao>;
@@ -164,15 +164,15 @@ comentario_bloco: /\*([^\*/]*|((\*)*|(/)*)[^\*/]+)*(\*)*\*/
 <funcao>::=funcao identificador "(" <lista_parametros> ")" ":" <tipo> ";" <variaveis_opcional> inicio <lista_comandos> fim;
 <procedimento>::=procedimento identificador "(" <lista_parametros> ")" ";" <variaveis_opcional> inicio <lista_comandos> fim;
 <expressao> ::= <elemento><expressao_1>;
-<expressao_1> ::= î|e <elemento><expressao_1>|ou <elemento><expressao_1>;
-<elemento> ::= <relacional> | verdadeiro | falso | nao <elemento>;
+<expressao_1> ::= î|e <elemento> #19 <expressao_1>|ou <elemento> #20 <expressao_1>;
+<elemento> ::= <relacional> | verdadeiro #12 | falso #13 | nao <elemento> #14;
 <relacional> ::=<aritmetica><relacional_1>;
-<relacional_1>::=<operador_relacional> <aritmetica>|î;
+<relacional_1>::=<operador_relacional> #11 <aritmetica> #10 |î;
 <operador_relacional> ::= "=" | "<>" | "<" | "<=" | ">" | ">=";
 <aritmetica> ::= <termo><aritmetica_1>;
-<aritmetica_1> ::=î| "+" <termo><aritmetica_1>|"-" <termo><aritmetica_1>;
+<aritmetica_1> ::=î| "+" <termo> #1 <aritmetica_1>|"-" <termo> #2 <aritmetica_1>;
 <termo> ::=<fator><termo_1>;
-<termo_1>::=î|"*" <fator><termo_1>|"/" <fator><termo_1>;
-<fator> ::= identificador <fator_1> | constante_inteira | constante_real | constante_caracter | "(" <expressao> ")" | "+" <fator> | "-" <fator>;
+<termo_1>::=î|"*" <fator> #3 <termo_1>|"/" <fator> #4 <termo_1>;
+<fator> ::= identificador <fator_1> | constante_inteira #5 | constante_real #6 | constante_caracter #21 | "(" <expressao> ")" | "+" <fator> #8 | "-" <fator> #9;
 <fator_1>::=î|"(" <lista_parametros> ")";
 
