@@ -24,8 +24,8 @@ class SemanticRunner {
 	
 	public void run15(final String fileName) {
 		this.appendSourceCode(".assembly extern mscorlib {}");
-		this.appendSourceCode(".assembly \"" + fileName + "\"{}");
-		this.appendSourceCode(".module \"" + fileName + "\".exe");
+		this.appendSourceCode(".assembly " + fileName + "{}");
+		this.appendSourceCode(".module " + fileName + ".exe");
 		this.appendSourceCode(".class public _Principal{");
 		this.appendSourceCode(".method static public void _principal()");
 		this.appendSourceCode("{ .entrypoint\"");
