@@ -12,9 +12,11 @@ public final class CompilerWindowFactory {
 	public static final CompilerWindow createInstance() {
 		final JTextArea codeTextArea = new JTextArea();
 		final JTextArea messageTextArea = new JTextArea();
+		final JTextArea consoleTextArea = new JTextArea();
 		final JLabel bottomLabel = new JLabel();
 
-		return new CompilerWindow(codeTextArea, messageTextArea, bottomLabel, new CompilerWindowHandler(codeTextArea, messageTextArea, bottomLabel));
+		return new CompilerWindow(codeTextArea, messageTextArea, consoleTextArea, bottomLabel,
+				new CompilerWindowHandler(codeTextArea, messageTextArea, consoleTextArea, bottomLabel));
 	}
 
 }

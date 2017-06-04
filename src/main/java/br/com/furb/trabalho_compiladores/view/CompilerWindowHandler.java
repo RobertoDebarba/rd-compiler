@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -19,6 +20,7 @@ import br.com.furb.trabalho_compiladores.compiler.Compiler;
 
 final class CompilerWindowHandler {
 
+	private static final String LINE_BREAK = "\n";
 	private static final String TEAM_MESSAGE = "Equipe:\r\n\tFrancisco Krautchuk Neto\r\n\tRoberto Luiz Debarba";
 	private static final String NOT_IMPLEMENTED_YET_MESSAGE = "Geração de código ainda não foi implementada.";
 	private static final String TEXT_FILES_MESSAGE = "Arquivos de Texto";
@@ -39,10 +41,12 @@ final class CompilerWindowHandler {
 	private final JTextArea codeTextArea;
 	private final JTextArea messageTextArea;
 	private final JLabel bottomLabel;
+	private final JTextArea consoleTextArea;
 
-	public CompilerWindowHandler(final JTextArea codeTextArea, final JTextArea messageTextArea, final JLabel bottomLabel) {
+	public CompilerWindowHandler(final JTextArea codeTextArea, final JTextArea messageTextArea, final JTextArea consoleTextArea, final JLabel bottomLabel) {
 		this.codeTextArea = codeTextArea;
 		this.messageTextArea = messageTextArea;
+		this.consoleTextArea = consoleTextArea;
 		this.bottomLabel = bottomLabel;
 	}
 
@@ -150,6 +154,8 @@ final class CompilerWindowHandler {
 		}
 
 		log(compilationMessage);
+
+		this.run();
 	}
 
 	public void showTeam() {
@@ -178,6 +184,24 @@ final class CompilerWindowHandler {
 
 	private void log(final String text) {
 		messageTextArea.setText(text);
+	}
+
+	private void run() {
+		this.clean(consoleTextArea);
+
+		try {
+			final Process process = Runtime.getRuntime().exec("ilasm " + this.filePath.toString());
+			process.waitFor();
+
+			try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
+				String line;
+				while ((line = reader.readLine()) != null) {
+					consoleTextArea.append(line + LINE_BREAK);
+				}
+			}
+		} catch (IOException | InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

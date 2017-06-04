@@ -1,16 +1,20 @@
 package br.com.furb.trabalho_compiladores.view;
 
 import java.awt.Dimension;
+import java.awt.Graphics2D;
 import java.awt.GridLayout;
+import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.image.BufferedImage;
 
 import javax.swing.AbstractAction;
 import javax.swing.AbstractButton;
+import javax.swing.BoxLayout;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.ImageIcon;
@@ -20,6 +24,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
+import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.KeyStroke;
 import javax.swing.LayoutStyle.ComponentPlacement;
@@ -32,6 +38,9 @@ import javax.swing.event.DocumentListener;
 public final class CompilerWindow extends JFrame {
 
 	private static final long serialVersionUID = 8845541166781805405L;
+
+	private static final String MESSAGE_TAB_TITLE = "Mensagens";
+	private static final String CONSOLE_TAB_TITLE = "Console";
 
 	private static final String KEY_F1 = "F1";
 	private static final String KEY_F8 = "F8";
@@ -46,6 +55,8 @@ public final class CompilerWindow extends JFrame {
 	private static final String SAVE_ICON = "filesave.png";
 	private static final String OPEN_ICON = "fileopen.png";
 	private static final String NEW_ICON = "filenew.png";
+	private static final String CONSOLE_ICON = "console.png";
+	private static final String INFO_ICON = "info.png";
 
 	private static final String SAVE_CTRL_S = "salvar [ctrl-s]";
 	private static final String TEAM_F1 = "equipe [F1]";
@@ -59,7 +70,8 @@ public final class CompilerWindow extends JFrame {
 
 	private final JPanel contentPane;
 
-	public CompilerWindow(final JTextArea codeTextArea, final JTextArea messageTextArea, final JLabel bottomLabel, final CompilerWindowHandler windowHandler) {
+	public CompilerWindow(final JTextArea codeTextArea, final JTextArea messageTextArea, final JTextArea consoleTextArea, final JLabel bottomLabel,
+			final CompilerWindowHandler windowHandler) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 900, 620);
 		setMinimumSize(new Dimension(900, 620));
@@ -70,33 +82,57 @@ public final class CompilerWindow extends JFrame {
 		final JPanel buttonsPanel = new JPanel();
 		final JPanel bottomPanel = new JPanel();
 
+		final JSplitPane splitPane = new JSplitPane();
+		splitPane.setOneTouchExpandable(true);
+		splitPane.setResizeWeight(0.85);
+		splitPane.setOrientation(JSplitPane.VERTICAL_SPLIT);
+
+		final GroupLayout gl_contentPane = new GroupLayout(contentPane);
+		gl_contentPane.setHorizontalGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_contentPane.createSequentialGroup().addComponent(buttonsPanel, GroupLayout.PREFERRED_SIZE, 144, GroupLayout.PREFERRED_SIZE)
+						.addPreferredGap(ComponentPlacement.RELATED).addComponent(splitPane, GroupLayout.DEFAULT_SIZE, 724, Short.MAX_VALUE))
+				.addComponent(bottomPanel, GroupLayout.DEFAULT_SIZE, 874, Short.MAX_VALUE));
+		gl_contentPane.setVerticalGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_contentPane.createSequentialGroup()
+						.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING).addComponent(splitPane, GroupLayout.DEFAULT_SIZE, 540, Short.MAX_VALUE)
+								.addComponent(buttonsPanel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 540, Short.MAX_VALUE))
+						.addPreferredGap(ComponentPlacement.RELATED).addComponent(bottomPanel, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE)));
+
 		final JScrollPane codePanel = new JScrollPane();
+		splitPane.setLeftComponent(codePanel);
 		codePanel.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
 		codePanel.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		codePanel.setViewportView(codeTextArea);
+
+		final JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		splitPane.setRightComponent(tabbedPane);
+
+		final JPanel messageTab = new JPanel();
+		tabbedPane.addTab(MESSAGE_TAB_TITLE, this.getTabIcon(new ImageIcon(getClass().getResource(INFO_ICON))), messageTab, null);
+		messageTab.setLayout(new BoxLayout(messageTab, BoxLayout.X_AXIS));
 
 		final JScrollPane messagePanel = new JScrollPane();
 		messagePanel.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
 		messagePanel.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-		final GroupLayout gl_contentPane = new GroupLayout(contentPane);
-		gl_contentPane.setHorizontalGroup(gl_contentPane.createParallelGroup(Alignment.LEADING).addGroup(gl_contentPane.createSequentialGroup()
-				.addComponent(buttonsPanel, GroupLayout.PREFERRED_SIZE, 144, GroupLayout.PREFERRED_SIZE).addPreferredGap(ComponentPlacement.RELATED)
-				.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING).addComponent(messagePanel, GroupLayout.DEFAULT_SIZE, 750, Short.MAX_VALUE)
-						.addComponent(codePanel, GroupLayout.DEFAULT_SIZE, 750, Short.MAX_VALUE)))
-				.addComponent(bottomPanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
-		gl_contentPane.setVerticalGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPane.createSequentialGroup()
-						.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addGroup(gl_contentPane.createSequentialGroup().addComponent(codePanel, GroupLayout.DEFAULT_SIZE, 480, Short.MAX_VALUE)
-										.addPreferredGap(ComponentPlacement.RELATED).addComponent(messagePanel, GroupLayout.PREFERRED_SIZE, 102,
-												GroupLayout.PREFERRED_SIZE))
-								.addComponent(buttonsPanel, GroupLayout.PREFERRED_SIZE, 544, GroupLayout.PREFERRED_SIZE))
-						.addPreferredGap(ComponentPlacement.RELATED).addComponent(bottomPanel, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE)));
+		messagePanel.setViewportView(messageTextArea);
 
-		codeTextArea.setBorder(new NumberedBorder());
-		codePanel.setViewportView(codeTextArea);
+		messageTab.add(messagePanel);
+
+		final JPanel consoleTab = new JPanel();
+		consoleTab.setLayout(new BoxLayout(consoleTab, BoxLayout.X_AXIS));
+		tabbedPane.addTab(CONSOLE_TAB_TITLE, this.getTabIcon(new ImageIcon(getClass().getResource(CONSOLE_ICON))), consoleTab, null);
+
+		final JScrollPane consolePanel = new JScrollPane();
+
+		consolePanel.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+		consolePanel.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		consolePanel.setViewportView(consoleTextArea);
+
+		consoleTab.add(consolePanel);
 
 		messageTextArea.setEditable(false);
-		messagePanel.setViewportView(messageTextArea);
+
+		codeTextArea.setBorder(new NumberedBorder());
 
 		final JButton newButton = new JButton(NEW_CTRL_N);
 		newButton.setIcon(new ImageIcon(getClass().getResource(NEW_ICON)));
@@ -216,4 +252,16 @@ public final class CompilerWindow extends JFrame {
 		button.addActionListener(action);
 	}
 
+	private ImageIcon getTabIcon(final ImageIcon srcImg) {
+		final int iconSize = 16;
+
+		final BufferedImage resizedImg = new BufferedImage(iconSize, iconSize, BufferedImage.TYPE_INT_ARGB);
+		final Graphics2D g2 = resizedImg.createGraphics();
+
+		g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+		g2.drawImage(srcImg.getImage(), 0, 0, iconSize, iconSize, null);
+		g2.dispose();
+
+		return new ImageIcon(resizedImg);
+	}
 }
