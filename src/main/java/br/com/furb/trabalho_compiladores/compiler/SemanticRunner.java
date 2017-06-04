@@ -36,11 +36,10 @@ class SemanticRunner {
 		this.appendSourceCode("}");
 	}
 
-	public void run17() {
+	public String run17() {
 		this.appendSourceCode("}");
 		
-		//TODO remover
-		System.out.println(this.sourceCode.toString());
+		return this.sourceCode.toString();
 	}
 	
 	private void appendSourceCode(String sourceCode) {

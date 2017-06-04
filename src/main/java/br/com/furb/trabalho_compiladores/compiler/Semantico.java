@@ -2,9 +2,16 @@ package br.com.furb.trabalho_compiladores.compiler;
 
 final class Semantico implements Constants {
 
-	private SemanticRunner semanticRunner = new SemanticRunner();
+	public String fileName;
+	private String sourceCode;
+	private final SemanticRunner semanticRunner = new SemanticRunner();
 
-	public void executeAction(int action, Token token) throws SemanticError {
+	public Semantico(final String fileName) {
+		super();
+		this.fileName = fileName;
+	}
+
+	public void executeAction(final int action, final Token token) throws SemanticError {
 		System.out.println("Ação #" + action + ", Token: " + token);
 		switch (action) {
 		case 5:
@@ -17,17 +24,21 @@ final class Semantico implements Constants {
 			this.semanticRunner.run7();
 			break;
 		case 15:
-			this.semanticRunner.run15("nome do arquivo");// TODO nome do arquivo
+			this.semanticRunner.run15(this.fileName);
 			break;
 		case 16:
 			this.semanticRunner.run16();
 			break;
 		case 17:
-			this.semanticRunner.run17();
+			this.sourceCode = this.semanticRunner.run17();
 			break;
 
 		default:
 			break;
 		}
+	}
+
+	public String getSourceCode() {
+		return this.sourceCode;
 	}
 }
