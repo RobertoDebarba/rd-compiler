@@ -28,7 +28,7 @@ class SemanticRunner {
 		this.appendSourceCode(".module " + fileName + ".exe");
 		this.appendSourceCode(".class public _Principal{");
 		this.appendSourceCode(".method static public void _principal()");
-		this.appendSourceCode("{ .entrypoint\"");
+		this.appendSourceCode("{ .entrypoint");
 	}
 
 	public void run16() {
