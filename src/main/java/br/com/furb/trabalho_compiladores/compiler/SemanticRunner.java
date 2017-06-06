@@ -8,6 +8,53 @@ class SemanticRunner {
 	private StringBuilder sourceCode = new StringBuilder();
 	private Stack<String> types = new Stack<>();
 
+	public void run1() {
+		String tipo1 = this.types.pop();
+		String tipo2 = this.types.pop();
+		if (tipo1.contains(".") || tipo2.contains(".")) {
+			this.types.push("float64");
+		} else {
+			this.types.push("int64");
+		}
+		this.appendSourceCode("add");
+	}
+
+	public void run2() {
+		String tipo1 = this.types.pop();
+		String tipo2 = this.types.pop();
+		if (tipo1.contains(".") || tipo2.contains(".")) {
+			this.types.push("float64");
+		} else {
+			this.types.push("int64");
+		}
+		this.appendSourceCode("sub");
+	}
+
+	public void run3() {
+		String tipo1 = this.types.pop();
+		String tipo2 = this.types.pop();
+		if (tipo1.contains(".") || tipo2.contains(".")) {
+			this.types.push("float64");
+		} else {
+			this.types.push("int64");
+		}
+		this.appendSourceCode("mul");
+	}
+	public void run4() {
+		String tipo1 = this.types.pop();
+		String tipo2 = this.types.pop();
+		if (tipo1.contains(".") && tipo2.contains(".")) {
+			this.types.push("float64");
+		} else  if  (!tipo1.contains(".") && !tipo2.contains(".")) {
+			this.types.push("int64");
+		}
+		else 
+		{
+			//throw new SemanticError("tipos incompatíveis em operação de divisão.");			
+		}
+		this.appendSourceCode("div");
+	}
+
 	public void run5(final String lexeme) {
 		this.types.push("int64");
 		this.appendSourceCode("ldc.i8 " + lexeme);
@@ -21,7 +68,7 @@ class SemanticRunner {
 	public void run7() {
 		this.appendSourceCode("call void [mscorlib]System.Console::Write(" + this.types.pop() + ")");
 	}
-	
+
 	public void run15(final String fileName) {
 		this.appendSourceCode(".assembly extern mscorlib {}");
 		this.appendSourceCode(".assembly " + fileName + "{}");
@@ -38,10 +85,10 @@ class SemanticRunner {
 
 	public String run17() {
 		this.appendSourceCode("}");
-		
+
 		return this.sourceCode.toString();
 	}
-	
+
 	private void appendSourceCode(String sourceCode) {
 		this.sourceCode.append(sourceCode).append("\n");
 	}

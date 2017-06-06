@@ -14,6 +14,14 @@ final class Semantico implements Constants {
 	public void executeAction(final int action, final Token token) throws SemanticError {
 		System.out.println("Ação #" + action + ", Token: " + token);
 		switch (action) {
+		case 1:
+			this.semanticRunner.run1();
+		case 2:
+			this.semanticRunner.run2();
+		case 3:
+			this.semanticRunner.run3();
+		case 4:
+			this.semanticRunner.run4();
 		case 5:
 			this.semanticRunner.run5(token.getLexeme());
 			break;
