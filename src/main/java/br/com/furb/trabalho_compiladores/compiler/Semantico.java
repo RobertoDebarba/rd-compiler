@@ -16,12 +16,16 @@ final class Semantico implements Constants {
 		switch (action) {
 		case 1:
 			this.semanticRunner.run1();
+			break;
 		case 2:
 			this.semanticRunner.run2();
+			break;
 		case 3:
 			this.semanticRunner.run3();
+			break;
 		case 4:
 			this.semanticRunner.run4();
+			break;
 		case 5:
 			this.semanticRunner.run5(token.getLexeme());
 			break;
@@ -30,6 +34,9 @@ final class Semantico implements Constants {
 			break;
 		case 7:
 			this.semanticRunner.run7();
+			break;
+		case 8:
+			
 			break;
 		case 15:
 			this.semanticRunner.run15(this.fileName);

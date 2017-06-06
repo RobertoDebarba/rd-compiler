@@ -5,13 +5,13 @@ import java.util.Stack;
 class SemanticRunner {
 
 	private String operator;
-	private StringBuilder sourceCode = new StringBuilder();
-	private Stack<String> types = new Stack<>();
+	private final StringBuilder sourceCode = new StringBuilder();
+	private final Stack<String> types = new Stack<>();
 
 	public void run1() {
-		String tipo1 = this.types.pop();
-		String tipo2 = this.types.pop();
-		if (tipo1.contains(".") || tipo2.contains(".")) {
+		final String type1 = this.types.pop();
+		final String type2 = this.types.pop();
+		if (type1.equals("float64") || type2.equals("float64")) {
 			this.types.push("float64");
 		} else {
 			this.types.push("int64");
@@ -20,9 +20,9 @@ class SemanticRunner {
 	}
 
 	public void run2() {
-		String tipo1 = this.types.pop();
-		String tipo2 = this.types.pop();
-		if (tipo1.contains(".") || tipo2.contains(".")) {
+		final String type1 = this.types.pop();
+		final String type2 = this.types.pop();
+		if (type1.equals("float64") || type2.equals("float64")) {
 			this.types.push("float64");
 		} else {
 			this.types.push("int64");
@@ -31,26 +31,23 @@ class SemanticRunner {
 	}
 
 	public void run3() {
-		String tipo1 = this.types.pop();
-		String tipo2 = this.types.pop();
-		if (tipo1.contains(".") || tipo2.contains(".")) {
+		final String type1 = this.types.pop();
+		final String type2 = this.types.pop();
+		if (type1.equals("float64") || type2.equals("float64")) {
 			this.types.push("float64");
 		} else {
 			this.types.push("int64");
 		}
 		this.appendSourceCode("mul");
 	}
-	public void run4() {
-		String tipo1 = this.types.pop();
-		String tipo2 = this.types.pop();
-		if (tipo1.contains(".") && tipo2.contains(".")) {
-			this.types.push("float64");
-		} else  if  (!tipo1.contains(".") && !tipo2.contains(".")) {
-			this.types.push("int64");
-		}
-		else 
-		{
-			//throw new SemanticError("tipos incompatíveis em operação de divisão.");			
+
+	public void run4() throws SemanticError {
+		final String type1 = this.types.pop();
+		final String type2 = this.types.pop();
+		if (type1.equals(type2)) {
+			this.types.push(type1);
+		} else {
+			throw new SemanticError("tipos incompatíveis em operação de divisão.");
 		}
 		this.appendSourceCode("div");
 	}
@@ -67,6 +64,15 @@ class SemanticRunner {
 
 	public void run7() {
 		this.appendSourceCode("call void [mscorlib]System.Console::Write(" + this.types.pop() + ")");
+	}
+
+	public void run8() throws SemanticError {
+		String type = this.types.pop();
+		if (type.equals("int64") || type.equals("float64")) {
+			this.types.push(type);
+		} else {
+			throw new SemanticError("tipo incompatível em operação unária.");
+		}
 	}
 
 	public void run15(final String fileName) {
@@ -89,7 +95,7 @@ class SemanticRunner {
 		return this.sourceCode.toString();
 	}
 
-	private void appendSourceCode(String sourceCode) {
+	private void appendSourceCode(final String sourceCode) {
 		this.sourceCode.append(sourceCode).append("\n");
 	}
 
