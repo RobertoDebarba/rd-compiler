@@ -67,12 +67,60 @@ class SemanticRunner {
 	}
 
 	public void run8() throws SemanticError {
-		String type = this.types.pop();
+		final String type = this.types.pop();
 		if (type.equals("int64") || type.equals("float64")) {
 			this.types.push(type);
 		} else {
 			throw new SemanticError("tipo incompatível em operação unária.");
 		}
+	}
+
+	public void run10() throws SemanticError {
+		final String type1 = this.types.pop();
+		final String type2 = this.types.pop();
+		if (type1.equals(type2)) {
+			this.types.push("bool");
+		} else {
+			throw new SemanticError("tipo incompatível em operação relacional");
+		}
+
+		switch (this.operator) {
+		case "=":
+			this.appendSourceCode("ceq");
+			break;
+		case "<":
+			this.appendSourceCode("clt");
+			break;
+		case ">":
+			this.appendSourceCode("cgt");
+			break;
+		}
+	}
+
+	public void run11(final String lexeme) {
+		this.operator = lexeme;
+	}
+
+	public void run12() {
+		this.types.push("bool");
+		this.appendSourceCode("ldc.i4.1");
+	}
+
+	public void run13() {
+		this.types.push("bool");
+		this.appendSourceCode("ldc.i4.0");
+	}
+
+	public void run14() throws SemanticError {
+		final String type = this.types.pop();
+		if (type.equals("bool")) {
+			this.types.push(type);
+		} else {
+			throw new SemanticError("tipo incompatível em operação not");
+		}
+
+		this.appendSourceCode("ldc.i4.1");
+		this.appendSourceCode("xor");
 	}
 
 	public void run15(final String fileName) {
