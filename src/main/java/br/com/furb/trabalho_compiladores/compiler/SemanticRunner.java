@@ -75,6 +75,17 @@ class SemanticRunner {
 		}
 	}
 
+	public void run9() throws SemanticError {
+		String type = this.types.pop();
+		if (type.equals("int64") || type.equals("float64")) {
+			this.types.push(type);
+		} else {
+			throw new SemanticError("tipo incompatível em operação unária.");
+		}
+		this.appendSourceCode("ldc.i8 -1");
+		this.appendSourceCode("mul");
+	}
+
 	public void run10() throws SemanticError {
 		final String type1 = this.types.pop();
 		final String type2 = this.types.pop();
