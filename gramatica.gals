@@ -10,16 +10,15 @@ ScannerTable = Compact
 Input = Stream
 Parser = LL
 #RegularDefinitions
-acentuada: [√°√Å√¢√Ç√£√É√†√Ä√©√â√™√ä√≠√ç√Æ√é√≥√ì√¥√î√µ√ï√∫√ö√ª√õ√ß√á]
+acentuada: [·¡‚¬„√‡¿È…Í ÌÕÓŒÛ”Ù‘ı’˙⁄˚€Á«]
 letra: [a-z A-Z]
 digito: [0-9]
 simbolo: [^\\\n\"]
 
 comentario_linha: "/" "/"[^\n]*
 comentario_bloco: /\*([^\*/]*|((\*)*|(/)*)[^\*/]+)*(\*)*\*/
-
 #Tokens
-//tokens gen√©ricos
+//tokens genÈricos
 	identificador: ({letra}|{acentuada})(_)?((({letra}|{digito}|{acentuada})+_)*|({letra}|{acentuada}|{digito}))*
 	constante_inteira: 0|[1-9][0-9]*
 	constante_real: (0|[1-9][0-9]*)\.[0-9]+
@@ -28,20 +27,21 @@ comentario_bloco: /\*([^\*/]*|((\*)*|(/)*)[^\*/]+)*(\*)*\*/
 
 //tokens especificos: palavras reservadas
 	algoritmo = identificador: "algoritmo"
-	ate = identificador: "at√©"
+	ate = identificador: "atÈ"
 	caracter = identificador: "caracter"
 	e = identificador: "e"
-	entao = identificador: "ent√£o"
+	entao = identificador: "ent„o"
 	escreva = identificador: "escreva"
+	faca = identificador: "faÁa"
 	falso = identificador: "falso"
 	fim = identificador: "fim"
-	funcao = identificador: "fun√ß√£o"
-	inicio = identificador: "in√≠cio"
+	funcao = identificador: "funÁ„o"
+	inicio = identificador: "inÌcio"
 	inteiro = identificador: "inteiro"
 	interrompa = identificador: "interrompa"
 	leia = identificador: "leia"
-	logico = identificador: "l√≥gico"
-	nao = identificador: "n√£o"
+	logico = identificador: "lÛgico"
+	nao = identificador: "n„o"
 	ou = identificador: "ou"
 	procedimento = identificador: "procedimento"
 	quebra = identificador: "quebra"
@@ -49,8 +49,8 @@ comentario_bloco: /\*([^\*/]*|((\*)*|(/)*)[^\*/]+)*(\*)*\*/
 	repita = identificador: "repita"
 	retorne = identificador: "retorne"
 	se = identificador: "se"
-	senao = identificador: "sen√£o"
-	variaveis = identificador: "vari√°veis"
+	senao = identificador: "sen„o"
+	variaveis = identificador: "vari·veis"
 	verdadeiro = identificador: "verdadeiro"
 
 
@@ -73,7 +73,7 @@ comentario_bloco: /\*([^\*/]*|((\*)*|(/)*)[^\*/]+)*(\*)*\*/
 	")"
 
 
-//ignorar: caracteres de formata√ß√£o e coment√°rios
+//ignorar: caracteres de formataÁ„o e coment·rios
 	:[\s\t\n]
 	:!{comentario_bloco}
 	:!{comentario_linha}
@@ -128,51 +128,50 @@ comentario_bloco: /\*([^\*/]*|((\*)*|(/)*)[^\*/]+)*(\*)*\*/
 <fator_1>
 #Grammar
 <programa>::= #15 algoritmo constante_caracter <cabecalho_modulos> <variaveis_opcional> inicio <lista_comandos> fim #16 <lista_modulos> #17;
-<cabecalho_modulos>::=<cabecalho><cabecalho_modulos>|√Æ;
-<variaveis_opcional>::=<variaveis>|√Æ;
-<lista_comandos>::=<comando>";"<lista_comandos>|√Æ;
+<cabecalho_modulos>::=<cabecalho><cabecalho_modulos>|Ó;
+<variaveis_opcional>::=<variaveis>|Ó;
+<lista_comandos>::=<comando>";"<lista_comandos>|Ó;
 <comando>::=identificador #23 <comando_1>|<entrada_dados>|<saida_dados>|<selecao>|<repeticao>|<interrompa>|<retorne>;
 <comando_1>::="<-" <expressao> #27|"(" <parametros_reais> ")" #38;
-<lista_modulos>::=<modulo><lista_modulos>|√Æ;
+<lista_modulos>::=<modulo><lista_modulos>|Ó;
 <modulo>::=<funcao>|<procedimento>;
 <cabecalho>::=<funcao_cabecalho>|<procedimento_cabecalho>;
 <funcao_cabecalho>::=funcao identificador #33 "(" <lista_parametros> ")" ":" <tipo> #22 #34 ";";
 <procedimento_cabecalho>::=procedimento identificador #33 "(" <lista_parametros> ")" #35 ";";
-<lista_parametros>::=<parametro><lista_parametros_adicionais>|√Æ;
-<lista_parametros_adicionais>::=";" <parametro><lista_parametros_adicionais>|√Æ;
+<lista_parametros>::=<parametro><lista_parametros_adicionais>|Ó;
+<lista_parametros_adicionais>::=";" <parametro><lista_parametros_adicionais>|Ó;
 <parametro>::=<lista_identificadores> ":" <tipo> #22 #36;
 <lista_identificadores>::=identificador #23 <lista_identificadores_adicionais>;
-<lista_identificadores_adicionais>::="," identificador #23 <lista_identificadores_adicionais>|√Æ;
+<lista_identificadores_adicionais>::="," identificador #23 <lista_identificadores_adicionais>|Ó;
 <tipo>::=caracter|logico|inteiro|real;
 <variaveis>::=variaveis <lista_variaveis>;
 <lista_variaveis>::=<variavel><lista_variaveis_1>;
-<lista_variaveis_1>::=√Æ|<lista_variaveis>;
+<lista_variaveis_1>::=Ó|<lista_variaveis>;
 <variavel>::=<lista_identificadores> ":" <tipo> #22 #24 ";";
 <entrada_dados>::=leia "(" <lista_identificadores> #25 ")";
 <saida_dados>::=escreva "(" <lista_valores> ")";
 <lista_valores>::=<valor> #7 <lista_valores_adicionais>;
-<lista_valores_adicionais>::="," <valor> #7 <lista_valores_adicionais>|√Æ;
+<lista_valores_adicionais>::="," <valor> #7 <lista_valores_adicionais>|Ó;
 <valor>::=<expressao>|quebra #18;
 <selecao>::=se <expressao> #28 entao <lista_comandos> <senao_opcional> fim #29;
-<senao_opcional>::=senao #30 <lista_comandos>|√Æ;
-<repeticao>::=repita #31 <lista_comandos> ate <expressao> #32;
+<senao_opcional>::=senao #30 <lista_comandos>|Ó;
+<repeticao>::=repita #31 <lista_comandos> atÈ <expressao> #32;
 <interrompa>::=interrompa;
 <retorne>::=retorne <expressao>;
-<parametros_reais>::=<lista_expressoes>|√Æ;
+<parametros_reais>::=<lista_expressoes>|Ó;
 <lista_expressoes>::=<expressao><lista_expressoes_adicionais>;
-<lista_expressoes_adicionais>::="," <expressao><lista_expressoes_adicionais>|√Æ;
+<lista_expressoes_adicionais>::="," <expressao><lista_expressoes_adicionais>|Ó;
 <funcao>::=funcao identificador #37 ";" <variaveis_opcional> inicio <lista_comandos> fim #16;
 <procedimento>::=procedimento identificador #37 ";" <variaveis_opcional> inicio <lista_comandos> fim #16;
 <expressao> ::= <elemento><expressao_1>;
-<expressao_1> ::= √Æ|e <elemento> #19 <expressao_1>|ou <elemento> #20 <expressao_1>;
+<expressao_1> ::= Ó|e <elemento> #19 <expressao_1>|ou <elemento> #20 <expressao_1>;
 <elemento> ::= <relacional> | verdadeiro #12 | falso #13 | nao <elemento> #14;
 <relacional> ::=<aritmetica><relacional_1>;
-<relacional_1>::=<operador_relacional> #11 <aritmetica> #10 |√Æ;
+<relacional_1>::=<operador_relacional> #11 <aritmetica> #10 |Ó;
 <operador_relacional> ::= "=" | "<>" | "<" | "<=" | ">" | ">=";
 <aritmetica> ::= <termo><aritmetica_1>;
-<aritmetica_1> ::=√Æ| "+" <termo> #1 <aritmetica_1>|"-" <termo> #2 <aritmetica_1>;
+<aritmetica_1> ::=Ó| "+" <termo> #1 <aritmetica_1>|"-" <termo> #2 <aritmetica_1>;
 <termo> ::=<fator><termo_1>;
-<termo_1>::=√Æ|"*" <fator> #3 <termo_1>|"/" <fator> #4 <termo_1>;
+<termo_1>::=Ó|"*" <fator> #3 <termo_1>|"/" <fator> #4 <termo_1>;
 <fator> ::= identificador #23 <fator_1> | constante_inteira #5 | constante_real #6 | constante_caracter #21 | "(" <expressao> ")" | "+" <fator> #8 | "-" <fator> #9;
-<fator_1>::= #26 √Æ|"(" <lista_parametros> ")" #39;
-
+<fator_1>::= #26 Ó|"(" <parametros_reais> ")" #39;

@@ -114,7 +114,7 @@ interface ParserConstants {
 			{ 41 }, { 42 }, { 43 }, { 44 }, { 91, 90 }, { 0 }, { 31, 91, 96, 90 }, { 32, 91, 97, 90 }, { 93, 92 }, { 0 }, { 33, 93, 98, 92 },
 			{ 34, 93, 99, 92 }, { 2, 94 }, { 3, 100 }, { 4, 101 }, { 5, 116 }, { 45, 83, 46 }, { 31, 93, 103 }, { 32, 93, 104 }, { 0 }, { 45, 58, 46 } };
 
-	String[] PARSER_ERROR = { "", "encontrado %s esperado fim de programa", "encontrado %s esperado identificador", "encontrado %s esperado constante inteira",
+	String[] PARSER_ERROR = { "", "encontrado %s esperado fim de arquivo", "encontrado %s esperado identificador", "encontrado %s esperado constante inteira",
 			"encontrado %s esperado constante real", "encontrado %s esperado constante caracter", "encontrado %s esperado algoritmo",
 			"encontrado %s esperado até", "encontrado %s esperado caracter", "encontrado %s esperado e", "encontrado %s esperado então",
 			"encontrado %s esperado escreva", "encontrado %s esperado falso", "encontrado %s esperado fim", "encontrado %s esperado função",
@@ -131,7 +131,7 @@ interface ParserConstants {
 																			// inválido",
 			"encontrado %s esperado início variáveis", // "<variaveis_opcional>
 														// inválido",
-			"encontrado %s esperado identificador atá escreva fim interrompa leia repita retorne se senão", // "<lista_comandos>
+			"encontrado %s esperado identificador até escreva fim interrompa leia repita retorne se senão", // "<lista_comandos>
 																											// inválido",
 			"encontrado %s esperado identificador escreva interrompa leia repita retorne se", // "<comando>
 																								// inválido",
@@ -154,7 +154,7 @@ interface ParserConstants {
 													// inválido",
 			"encontrado %s esperado , : )", // "<lista_identificadores_adicionais>
 											// inválido",
-			"encontrado %s esperado caracter interiro lógico real", // "<tipo>
+			"encontrado %s esperado caracter inteiro lógico real", // "<tipo>
 																	// inválido",
 			"encontrado %s esperado variáveis", // "<variaveis> inválido",
 			"encontrado %s esperado identificador", // "<lista_variaveis>
