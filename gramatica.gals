@@ -32,7 +32,6 @@ comentario_bloco: /\*([^\*/]*|((\*)*|(/)*)[^\*/]+)*(\*)*\*/
 	e = identificador: "e"
 	entao = identificador: "então"
 	escreva = identificador: "escreva"
-	faca = identificador: "faça"
 	falso = identificador: "falso"
 	fim = identificador: "fim"
 	funcao = identificador: "função"
