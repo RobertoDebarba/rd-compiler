@@ -14,6 +14,7 @@ class SemanticRunner {
     private final Stack<String> types = new Stack<>();
     private final List<String> ids = new ArrayList<>();
     private final Map<String, String> symbolTable = new HashMap<>();
+    private int LabelCounter = 1;
 
     /**
      * Operação aritmética binária: <b>adição</b>
@@ -373,6 +374,18 @@ class SemanticRunner {
         }
 
         this.appendSourceCode("stloc " + id);
+    }
+    void run28() {
+    	this.LabelCounter++;
+    	this.appendSourceCode("brfalse label" + this.LabelCounter);
+    }
+    void run29() {
+    	this.appendSourceCode("label"+ (this.LabelCounter+1) + ":");
+    }
+    void run30() {
+    	this.LabelCounter++;
+    	this.appendSourceCode("br label"+ this.LabelCounter);
+    	this.appendSourceCode("label"+ (this.LabelCounter-1) +":");
     }
 
     private void appendSourceCode(final String sourceCode) {

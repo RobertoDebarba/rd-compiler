@@ -126,7 +126,7 @@ comentario_bloco: /\*([^\*/]*|((\*)*|(/)*)[^\*/]+)*(\*)*\*/
 <fator>
 <fator_1>
 #Grammar
-<programa>::= #15 algoritmo constante_caracter <cabecalho_modulos> <variaveis_opcional> inicio <lista_comandos> fim #16 <lista_modulos> #17;
+<programa>::= #15 algoritmo constante_caracter <cabecalho_modulos> <variaveis_opcional> início <lista_comandos> fim #16 <lista_modulos> #17;
 <cabecalho_modulos>::=<cabecalho><cabecalho_modulos>|î;
 <variaveis_opcional>::=<variaveis>|î;
 <lista_comandos>::=<comando>";"<lista_comandos>|î;
@@ -160,8 +160,8 @@ comentario_bloco: /\*([^\*/]*|((\*)*|(/)*)[^\*/]+)*(\*)*\*/
 <parametros_reais>::=<lista_expressoes>|î;
 <lista_expressoes>::=<expressao><lista_expressoes_adicionais>;
 <lista_expressoes_adicionais>::="," <expressao><lista_expressoes_adicionais>|î;
-<funcao>::=funcao identificador #37 ";" <variaveis_opcional> inicio <lista_comandos> fim #16;
-<procedimento>::=procedimento identificador #37 ";" <variaveis_opcional> inicio <lista_comandos> fim #16;
+<funcao>::=funcao identificador #37 ";" <variaveis_opcional> início <lista_comandos> fim #16;
+<procedimento>::=procedimento identificador #37 ";" <variaveis_opcional> início <lista_comandos> fim #16;
 <expressao> ::= <elemento><expressao_1>;
 <expressao_1> ::= î|e <elemento> #19 <expressao_1>|ou <elemento> #20 <expressao_1>;
 <elemento> ::= <relacional> | verdadeiro #12 | falso #13 | nao <elemento> #14;
