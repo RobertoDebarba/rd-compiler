@@ -14,7 +14,10 @@ class SemanticRunner {
     private final Stack<String> types = new Stack<>();
     private final List<String> ids = new ArrayList<>();
     private final Map<String, String> symbolTable = new HashMap<>();
-    private int LabelCounter = 1;
+    private int LabelCounter = 0;
+    private final Stack<String> labelIf = new Stack<>();
+    private final Stack<String> labelRepeat = new Stack<>();
+    
 
     /**
      * Operação aritmética binária: <b>adição</b>
@@ -376,16 +379,27 @@ class SemanticRunner {
         this.appendSourceCode("stloc " + id);
     }
     void run28() {
-    	this.LabelCounter++;
+    	this.LabelCounter++;    	
     	this.appendSourceCode("brfalse label" + this.LabelCounter);
+    	this.labelIf.push("label"+this.LabelCounter);
     }
     void run29() {
-    	this.appendSourceCode("label"+ (this.LabelCounter+1) + ":");
+    	this.appendSourceCode(this.labelIf.pop() + ":");
     }
     void run30() {
     	this.LabelCounter++;
-    	this.appendSourceCode("br label"+ this.LabelCounter);
-    	this.appendSourceCode("label"+ (this.LabelCounter-1) +":");
+    	this.appendSourceCode("br label"+ this.LabelCounter);    	 
+    	this.appendSourceCode(this.labelIf.pop() +":");
+    	this.labelIf.push("label"+this.LabelCounter);    	
+    }
+    void run31() {
+    	this.LabelCounter++;
+    	this.appendSourceCode("label"+ this.LabelCounter +":");
+    	this.labelRepeat.push("label"+ this.LabelCounter);
+    	
+    }
+    void run32() {    	
+    	this.appendSourceCode("brfalse " + this.labelRepeat.pop());    	
     }
 
     private void appendSourceCode(final String sourceCode) {

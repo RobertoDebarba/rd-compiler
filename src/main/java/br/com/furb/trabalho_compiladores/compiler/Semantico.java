@@ -104,6 +104,12 @@ final class Semantico implements Constants {
 		case 30:
 			this.semanticRunner.run30();
 			break;
+		case 31:
+			this.semanticRunner.run31();
+			break;
+		case 32:
+			this.semanticRunner.run32();
+			break;
 
 		default:
 			break;
