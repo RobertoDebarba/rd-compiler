@@ -43,7 +43,7 @@ class SemanticRunner {
 	/**
 	 * Operação aritmética binária: <b>adição</b>
 	 */
-	void run1() throws SemanticError {
+	void run1(Token token) throws SemanticError {
 		final String type1 = this.types.pop();
 		final String type2 = this.types.pop();
 
@@ -54,7 +54,7 @@ class SemanticRunner {
 			this.types.push(DataType.FLOAT);
 		} else {
 			// TODO validar e extrair mensagens
-			throw new SemanticError("Tipos incompatíveis em operação aritmética binária");
+			throw new SemanticError("Tipos incompatíveis em operação aritmética binária", token.getPosition());
 		}
 
 		this.appendSourceCode(DotNetCommands.ADD);
@@ -63,7 +63,7 @@ class SemanticRunner {
 	/**
 	 * Operação aritmética binária: <b>subtração</b>
 	 */
-	void run2() throws SemanticError {
+	void run2(Token token) throws SemanticError {
 		final String type1 = this.types.pop();
 		final String type2 = this.types.pop();
 
@@ -73,7 +73,7 @@ class SemanticRunner {
 				|| (isFloat(type2) && isFloat(type1) || isInt(type1))) {
 			this.types.push(DataType.FLOAT);
 		} else {
-			throw new SemanticError("Tipos incompatíveis em operação aritmética binária");
+			throw new SemanticError("Tipos incompatíveis em operação aritmética binária", token.getPosition());
 		}
 
 		this.appendSourceCode(DotNetCommands.SUB);
@@ -82,7 +82,7 @@ class SemanticRunner {
 	/**
 	 * Operação aritmética binária: <b>multiplicação</b>
 	 */
-	void run3() throws SemanticError {
+	void run3(Token token) throws SemanticError {
 		final String type1 = this.types.pop();
 		final String type2 = this.types.pop();
 
@@ -92,7 +92,7 @@ class SemanticRunner {
 				|| (isFloat(type2) && isFloat(type1) || isInt(type1))) {
 			this.types.push(DataType.FLOAT);
 		} else {
-			throw new SemanticError("Tipos incompatíveis em operação aritmética binária");
+			throw new SemanticError("Tipos incompatíveis em operação aritmética binária", token.getPosition());
 		}
 
 		this.appendSourceCode(DotNetCommands.MUL);
@@ -101,7 +101,7 @@ class SemanticRunner {
 	/**
 	 * Operação aritmética binária: <b>divisão</b>
 	 */
-	void run4() throws SemanticError {
+	void run4(Token token) throws SemanticError {
 		final String type1 = this.types.pop();
 		final String type2 = this.types.pop();
 
@@ -111,7 +111,7 @@ class SemanticRunner {
 				|| (isFloat(type2) && isFloat(type1) || isInt(type1))) {
 			this.types.push(DataType.FLOAT);
 		} else {
-			throw new SemanticError("Tipos incompatíveis em operação aritmética binária");
+			throw new SemanticError("Tipos incompatíveis em operação aritmética binária", token.getPosition());
 		}
 
 		this.appendSourceCode(DotNetCommands.DIV);
@@ -143,26 +143,26 @@ class SemanticRunner {
 	/**
 	 * Valor constante positivo
 	 */
-	void run8() throws SemanticError {
+	void run8(Token token) throws SemanticError {
 		final String type = this.types.pop();
 
 		if (isInt(type) || isFloat(type)) {
 			this.types.push(type);
 		} else {
-			throw new SemanticError("tipo incompatível em operação unária.");
+			throw new SemanticError("tipo incompatível em operação unária.", token.getPosition());
 		}
 	}
 
 	/**
 	 * Valor constante negativo
 	 */
-	void run9() throws SemanticError {
+	void run9(Token token) throws SemanticError {
 		final String type = this.types.pop();
 
 		if (isInt(type) || isFloat(type)) {
 			this.types.push(type);
 		} else {
-			throw new SemanticError("tipo incompatível em operação unária.");
+			throw new SemanticError("tipo incompatível em operação unária.", token.getPosition());
 		}
 
 		this.appendSourceCode(DotNetCommands.LDC_I8_1);
@@ -172,7 +172,7 @@ class SemanticRunner {
 	/**
 	 * Operação relacional
 	 */
-	void run10() throws SemanticError {
+	void run10(Token token) throws SemanticError {
 		final String type1 = this.types.pop();
 		final String type2 = this.types.pop();
 
@@ -180,7 +180,7 @@ class SemanticRunner {
 				|| (isString(type1) && isString(type2))) {
 			this.types.push(DataType.BOOLEAN);
 		} else {
-			throw new SemanticError("tipo incompatível em operação relacional");
+			throw new SemanticError("tipo incompatível em operação relacional", token.getPosition());
 		}
 
 		switch (this.operator) {
@@ -233,13 +233,13 @@ class SemanticRunner {
 	/**
 	 * Operador negação
 	 */
-	void run14() throws SemanticError {
+	void run14(Token token) throws SemanticError {
 		final String type = this.types.pop();
 
 		if (isBoolean(type)) {
 			this.types.push(type);
 		} else {
-			throw new SemanticError("tipo incompatível em operação not");
+			throw new SemanticError("tipo incompatível em operação not", token.getPosition());
 		}
 
 		this.appendSourceCode(DotNetCommands.LDC_I4_1);
@@ -281,14 +281,14 @@ class SemanticRunner {
 	/**
 	 * Operação lógica binária: <b>e</b>
 	 */
-	void run19() throws SemanticError {
+	void run19(Token token) throws SemanticError {
 		final String type1 = this.types.pop();
 		final String type2 = this.types.pop();
 
 		if (isBoolean(type1) || isBoolean(type2)) {
 			this.types.push(DataType.BOOLEAN);
 		} else {
-			throw new SemanticError("tipo incompatível em operação lógica");
+			throw new SemanticError("tipo incompatível em operação lógica", token.getPosition());
 		}
 
 		this.appendSourceCode(DotNetCommands.AND);
@@ -297,14 +297,14 @@ class SemanticRunner {
 	/**
 	 * Operação lógica binária: <b>ou</b>
 	 */
-	void run20() throws SemanticError {
+	void run20(Token token) throws SemanticError {
 		final String type1 = this.types.pop();
 		final String type2 = this.types.pop();
 
 		if (isBoolean(type1) || isBoolean(type2)) {
 			this.types.push(DataType.BOOLEAN);
 		} else {
-			throw new SemanticError("tipo incompatível em operação lógica");
+			throw new SemanticError("tipo incompatível em operação lógica", token.getPosition());
 		}
 
 		this.appendSourceCode(DotNetCommands.OR);
@@ -327,7 +327,7 @@ class SemanticRunner {
 		this.ids.add(lexeme);
 	}
 
-	void run24() throws SemanticError {
+	void run24(Token token) throws SemanticError {
 
 		switch (this.idType) {
 		case "int":
@@ -340,20 +340,20 @@ class SemanticRunner {
 
 		for (String id : this.ids) {
 			if (this.symbolTable.containsKey(id)) {
-				throw new SemanticError("identificador já declarado");
+				throw new SemanticError("identificador já declarado", token.getPosition());
 			}
 
 			this.symbolTable.put(id, new Symbol(this.idType, null));
 			this.appendSourceCode(".locals(" + this.idType + " " + id + ")");
 
-			this.ids.clear();
 		}
+		this.ids.clear();
 	}
 
-	void run25() throws SemanticError {
+	void run25(Token token) throws SemanticError {
 		for (String id : this.ids) {
 			if (!this.symbolTable.containsKey(id)) {
-				throw new SemanticError("Identificador não declarado");
+				throw new SemanticError("Identificador não declarado", token.getPosition());
 			}
 
 			this.idType = this.symbolTable.get(id).type;
@@ -370,16 +370,16 @@ class SemanticRunner {
 
 			this.appendSourceCode("stloc " + id);
 
-			this.ids.clear();
 		}
+		this.ids.clear();
 	}
 
-	void run26() throws SemanticError {
+	void run26(Token token) throws SemanticError {
 		final String id = this.ids.get(this.ids.size() - 1);
 		this.ids.remove(this.ids.size() - 1);
 
 		if (!this.symbolTable.containsKey(id)) {
-			throw new SemanticError("Identificador não declarado.");
+			throw new SemanticError("Identificador não declarado.", token.getPosition());
 		}
 
 		this.idType = this.symbolTable.get(id).type;
@@ -400,19 +400,19 @@ class SemanticRunner {
 //		this.appendSourceCode("ldloc " + id);
 //	}
 
-	void run27() throws SemanticError {
+	void run27(Token token) throws SemanticError {
 		String id = this.ids.get(this.ids.size() - 1);
 		this.ids.remove(this.ids.size() - 1);
 
 		if (!this.symbolTable.containsKey(id)) {
-			throw new SemanticError("Identificador não declarado.");
+			throw new SemanticError("Identificador não declarado.", token.getPosition());
 		}
 
 		String idType = this.symbolTable.get(id).type;
 		String expressionType = this.types.pop();
 
 		if (!idType.equalsIgnoreCase(expressionType)) {
-			throw new SemanticError("Tipos incompatíveis em comando de atribuição.");
+			throw new SemanticError("Tipos incompatíveis em comando de atribuição.", token.getPosition());
 		}
 
 		this.appendSourceCode("stloc " + id);
@@ -487,7 +487,7 @@ class SemanticRunner {
 		this.symbolTable.put(id, new Symbol(DataType.VOID, null));
 	}
 
-	void run36() throws SemanticError {
+	void run36(Token token) throws SemanticError {
         switch (this.idType) {
             case "int":
                 this.idType = "int64";
@@ -499,7 +499,7 @@ class SemanticRunner {
 
         for (String id : this.ids) {
             if (this.symbolTable.containsKey(id)) {
-                throw new SemanticError("identificador já declarado");
+                throw new SemanticError("identificador já declarado", token.getPosition());
             }
 
             this.symbolTable.put(id, new Symbol(this.idType, null));

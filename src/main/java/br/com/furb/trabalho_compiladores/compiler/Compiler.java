@@ -48,8 +48,7 @@ public final class Compiler {
 		} catch (final SemanticError e) {
 			this.isCompilationSuccessed = false;
 
-			e.printStackTrace();
-			return ""; // TODO
+			return String.format(GENERIC_LINE_ERROR_MESSAGE, findLine(sourceCode, e.getPosition()), e.getMessage());
 		}
 	}
 
