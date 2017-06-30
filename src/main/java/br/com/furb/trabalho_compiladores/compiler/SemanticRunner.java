@@ -55,8 +55,7 @@ class SemanticRunner {
                 || (isFloat(type2) && isFloat(type1) || isInt(type1))) {
             this.types.push(DataType.FLOAT);
         } else {
-            // TODO validar e extrair mensagens
-            throw new SemanticError("Tipos incompatíveis em operação aritmética binária", token.getPosition());
+            throw new SemanticError("tipos incompatíveis em operação aritmética binária", token.getPosition());
         }
 
         this.appendSourceCode(DotNetCommands.ADD);
@@ -75,7 +74,7 @@ class SemanticRunner {
                 || (isFloat(type2) && isFloat(type1) || isInt(type1))) {
             this.types.push(DataType.FLOAT);
         } else {
-            throw new SemanticError("Tipos incompatíveis em operação aritmética binária", token.getPosition());
+            throw new SemanticError("tipos incompatíveis em operação aritmética binária", token.getPosition());
         }
 
         this.appendSourceCode(DotNetCommands.SUB);
@@ -84,7 +83,8 @@ class SemanticRunner {
     /**
      * Operação aritmética binária: <b>multiplicação</b>
      */
-    void run3(Token token) throws SemanticError {
+    void
+    run3(Token token) throws SemanticError {
         final String type1 = this.types.pop();
         final String type2 = this.types.pop();
 
@@ -94,7 +94,7 @@ class SemanticRunner {
                 || (isFloat(type2) && isFloat(type1) || isInt(type1))) {
             this.types.push(DataType.FLOAT);
         } else {
-            throw new SemanticError("Tipos incompatíveis em operação aritmética binária", token.getPosition());
+            throw new SemanticError("tipos incompatíveis em operação aritmética binária", token.getPosition());
         }
 
         this.appendSourceCode(DotNetCommands.MUL);
@@ -113,7 +113,7 @@ class SemanticRunner {
                 || (isFloat(type2) && isFloat(type1) || isInt(type1))) {
             this.types.push(DataType.FLOAT);
         } else {
-            throw new SemanticError("Tipos incompatíveis em operação aritmética binária", token.getPosition());
+            throw new SemanticError("tipos incompatíveis em operação aritmética binária", token.getPosition());
         }
 
         this.appendSourceCode(DotNetCommands.DIV);
@@ -182,7 +182,7 @@ class SemanticRunner {
                 || (isString(type1) && isString(type2))) {
             this.types.push(DataType.BOOLEAN);
         } else {
-            throw new SemanticError("tipo incompatível em operação relacional", token.getPosition());
+            throw new SemanticError("tipos incompatíveis em operação relacional", token.getPosition());
         }
 
         switch (this.operator) {
@@ -245,7 +245,7 @@ class SemanticRunner {
         if (isBoolean(type)) {
             this.types.push(type);
         } else {
-            throw new SemanticError("tipo incompatível em operação not", token.getPosition());
+            throw new SemanticError("tipo incompatível em operação lógica unária", token.getPosition());
         }
 
         this.appendSourceCode(DotNetCommands.LDC_I4_1);
@@ -294,7 +294,7 @@ class SemanticRunner {
         if (isBoolean(type1) || isBoolean(type2)) {
             this.types.push(DataType.BOOLEAN);
         } else {
-            throw new SemanticError("tipo incompatível em operação lógica", token.getPosition());
+            throw new SemanticError("tipo incompatível em operação lógica binária", token.getPosition());
         }
 
         this.appendSourceCode(DotNetCommands.AND);
@@ -310,7 +310,7 @@ class SemanticRunner {
         if (isBoolean(type1) || isBoolean(type2)) {
             this.types.push(DataType.BOOLEAN);
         } else {
-            throw new SemanticError("tipo incompatível em operação lógica", token.getPosition());
+            throw new SemanticError("tipo incompatível em operação lógica binária", token.getPosition());
         }
 
         this.appendSourceCode(DotNetCommands.OR);
@@ -339,7 +339,7 @@ class SemanticRunner {
 
         for (String id : this.ids) {
             if (this.symbolTable.containsKey(id)) {
-                throw new SemanticError("identificador já declarado", token.getPosition());
+                throw new SemanticError(token + " já declarado", token.getPosition());
             }
 
             this.symbolTable.put(id, new Symbol(this.idType, "V", null));
@@ -369,7 +369,7 @@ class SemanticRunner {
     void run25(Token token) throws SemanticError {
         for (String id : this.ids) {
             if (!this.symbolTable.containsKey(id)) {
-                throw new SemanticError("Identificador não declarado", token.getPosition());
+                throw new SemanticError(token + " não declarado", token.getPosition());
             }
 
             this.idType = this.symbolTable.get(id).type;
@@ -395,7 +395,7 @@ class SemanticRunner {
         this.ids.remove(this.ids.size() - 1);
 
         if (!this.symbolTable.containsKey(id)) {
-            throw new SemanticError("Identificador não declarado.", token.getPosition());
+            throw new SemanticError(token + " não declarado.", token.getPosition());
         }
 
         Symbol symbol = this.symbolTable.get(id);
@@ -414,14 +414,14 @@ class SemanticRunner {
         this.ids.remove(this.ids.size() - 1);
 
         if (!this.symbolTable.containsKey(id)) {
-            throw new SemanticError("Identificador não declarado.", token.getPosition());
+            throw new SemanticError(token + " não declarado.", token.getPosition());
         }
 
         String idType = this.symbolTable.get(id).type;
         String expressionType = this.types.pop();
 
         if (!idType.equalsIgnoreCase(expressionType)) {
-            throw new SemanticError("Tipos incompatíveis em comando de atribuição.", token.getPosition());
+            throw new SemanticError("tipos incompatíveis em comando de atribuição.", token.getPosition());
         }
 
         this.appendSourceCode("stloc " + id);
@@ -458,7 +458,7 @@ class SemanticRunner {
     void run33(Token token) throws SemanticError {
         String lexeme = token.getLexeme();
         if (this.symbolTable.containsKey(lexeme)) {
-            throw new SemanticError("identificador já declarado", token.getPosition());
+            throw new SemanticError(token + " já declarado", token.getPosition());
         }
 
         this.symbolTable.put(lexeme, null);
@@ -529,9 +529,14 @@ class SemanticRunner {
         this.appendSourceCode(moduleDeclaration.toString());
     }
 
-    void run38() {
+    void run38(Token token) throws SemanticError {
         String moduleName = this.ids.get(this.ids.size() - 1);
         this.ids.remove(this.ids.size() - 1);
+
+        if (!this.symbolTable.containsKey(moduleName)) {
+            throw new SemanticError(moduleName + " não declarado", token.getPosition());
+        }
+
         Symbol moduleSymbol = this.symbolTable.get(moduleName);
 
         StringBuilder callModule = new StringBuilder("call void _Principal::_" + moduleName + "(");
@@ -552,9 +557,13 @@ class SemanticRunner {
         this.appendSourceCode(callModule.toString());
     }
 
-    void run39() {
+    void run39(Token token) throws SemanticError {
         String moduleName = this.ids.get(this.ids.size() - 1);
         this.ids.remove(this.ids.size() - 1);
+
+        if (!this.symbolTable.containsKey(moduleName)) {
+            throw new SemanticError(moduleName + " não declarado", token.getPosition());
+        }
 
         Symbol moduleSymbol = this.symbolTable.get(moduleName);
 
