@@ -455,7 +455,12 @@ class SemanticRunner {
         this.appendSourceCode("brfalse " + this.labelRepeat.pop());
     }
 
-    void run33(String lexeme) {
+    void run33(Token token) throws SemanticError {
+        String lexeme = token.getLexeme();
+        if (this.symbolTable.containsKey(lexeme)) {
+            throw new SemanticError("identificador já declarado", token.getPosition());
+        }
+
         this.symbolTable.put(lexeme, null);
         this.moduleName = lexeme;
     }

@@ -111,7 +111,7 @@ final class Semantico implements Constants {
                 this.semanticRunner.run32();
                 break;
             case 33:
-                this.semanticRunner.run33(token.getLexeme());
+                this.semanticRunner.run33(token);
                 break;
             case 34:
                 this.semanticRunner.run34(token.getLexeme());
