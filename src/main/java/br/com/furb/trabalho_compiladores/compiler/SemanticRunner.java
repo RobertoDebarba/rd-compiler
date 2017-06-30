@@ -7,13 +7,15 @@ class SemanticRunner {
     private String moduleName;
 
     class Symbol {
-        public Symbol(String type, List<Parameter> parameters) {
+        public Symbol(String type, String from, List<Parameter> parameters) {
             this.type = type;
-            this.parameters = parameters;
+			this.from = from;
+			this.parameters = parameters;
         }
 
         String type;
-        List<Parameter> parameters;
+		private String from;
+		List<Parameter> parameters;
     }
 
     class Parameter {
@@ -333,25 +335,35 @@ class SemanticRunner {
 
 	void run24(Token token) throws SemanticError {
 
-		switch (this.idType) {
-		case "inteiro":
-			this.idType = "int64";
-			break;
-		case "real":
-			this.idType = "float64";
-			break;
-		}
+		convertType();
 
 		for (String id : this.ids) {
 			if (this.symbolTable.containsKey(id)) {
 				throw new SemanticError("identificador já declarado", token.getPosition());
 			}
 
-			this.symbolTable.put(id, new Symbol(this.idType, null));
+			this.symbolTable.put(id, new Symbol(this.idType, "V", null));
 			this.appendSourceCode(".locals(" + this.idType + " " + id + ")");
 
 		}
 		this.ids.clear();
+	}
+
+	private void convertType() {
+		switch (this.idType) {
+		case "inteiro":
+			this.idType = DataType.INT;
+			break;
+		case "real":
+			this.idType = DataType.FLOAT;
+			break;
+		case "caracter":
+			this.idType = DataType.STRING;
+			break;
+		case "lógico":
+			this.idType = DataType.BOOLEAN;
+			break;
+		}
 	}
 
 	void run25(Token token) throws SemanticError {
@@ -386,10 +398,16 @@ class SemanticRunner {
 			throw new SemanticError("Identificador não declarado.", token.getPosition());
 		}
 
-		this.idType = this.symbolTable.get(id).type;
+		Symbol symbol = this.symbolTable.get(id);
+		this.idType = symbol.type;
 		this.types.push(this.idType);
 		// TODO verificar se id é variavel ou parametro formal.
-		this.appendSourceCode("ldloc " + id);
+
+		if (symbol.from.equals("V")) {
+			this.appendSourceCode("ldloc " + id);
+		} else {
+			this.appendSourceCode("ldarg " + id);
+		}
 	}
 //	void run26(String lexeme) throws SemanticError {
 //		final String id = lexeme;
@@ -464,20 +482,21 @@ class SemanticRunner {
 
         List<Parameter> parameters = new ArrayList<>();
         for (String id: this.ids) {
-            parameters.add(new Parameter(id, this.idType));
+			convertType();
+			parameters.add(new Parameter(id, this.idType));
         }
         switch (lexeme) {
             case "inteiro":
-                this.symbolTable.put(this.moduleName, new Symbol(DataType.INT, parameters));
+                this.symbolTable.put(this.moduleName, new Symbol(DataType.INT,  "F", parameters));
                 break;
             case "real":
-                this.symbolTable.put(this.moduleName, new Symbol(DataType.FLOAT, parameters));
+                this.symbolTable.put(this.moduleName, new Symbol(DataType.FLOAT, "F", parameters));
                 break;
             case "caracter":
-                this.symbolTable.put(this.moduleName, new Symbol(DataType.STRING, parameters));
+                this.symbolTable.put(this.moduleName, new Symbol(DataType.STRING, "F", parameters));
                 break;
             case "lógico":
-                this.symbolTable.put(this.moduleName, new Symbol(DataType.BOOLEAN, parameters));
+                this.symbolTable.put(this.moduleName, new Symbol(DataType.BOOLEAN, "F", parameters));
                 break;
         }
 
@@ -488,25 +507,18 @@ class SemanticRunner {
 //		String id = this.ids.get(this.ids.size() - 1);
 //		this.ids.remove(this.ids.size() - 1);
 		//this.symbolTable.get(id);
-		this.symbolTable.put(this.moduleName, new Symbol(DataType.VOID, null));
+		this.symbolTable.put(this.moduleName, new Symbol(DataType.VOID, "P", null));
 	}
 
 	void run36(Token token) throws SemanticError {
-        switch (this.idType) {
-            case "inteiro":
-                this.idType = "int64";
-                break;
-            case "real":
-                this.idType = "float64";
-                break;
-        }
+		convertType();
 
-        for (String id : this.ids) {
+		for (String id : this.ids) {
             if (this.symbolTable.containsKey(id)) {
                 throw new SemanticError("identificador já declarado", token.getPosition());
             }
 
-            this.symbolTable.put(id, new Symbol(this.idType, null));
+            this.symbolTable.put(id, new Symbol(this.idType, "F", null));
 
 //            this.ids.clear();
         }
