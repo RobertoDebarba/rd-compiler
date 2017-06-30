@@ -1,0 +1,7 @@
+algoritmo "exemplo 02"
+variáveis lado, área: inteiro;
+início
+    leia (lado);
+    área <- lado * lado;
+    escreva (área);
+fim

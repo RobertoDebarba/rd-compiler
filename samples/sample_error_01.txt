@@ -1,0 +1,6 @@
+algoritmo "exemplo 02
+início
+    leia (lado)
+    área <- lado * lado;
+    escreva (área);
+fim

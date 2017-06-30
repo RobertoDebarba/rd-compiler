@@ -1,0 +1,13 @@
+algoritmo "exemplo 03"
+variáveis lado, área: inteiro;
+início
+    área <- 0;
+    escreva ("digite um valor para lado: ");
+    leia (lado);
+    se lado > 0 então
+        área <- lado * lado;
+    senão
+        escreva ("valor inválido para lado - ");
+    fim;
+    escreva ("área: ", área);
+fim
