@@ -17,7 +17,7 @@ ldloc i
 ldc.i8 1
 add
 stloc i
-call void _Principal::_cargaHorária()
+call void _Principal::_cargaHoraria()
 ldstr "digite uma nota (enter) após outra: "
 call void [mscorlib]System.Console::Write(string)
 ldstr "\n"
@@ -31,7 +31,7 @@ stloc nota2
 ldloc soma
 ldloc nota1
 ldloc nota2
-call float64 _Principal::_média(float64,float64)
+call float64 _Principal::_media(float64,float64)
 add
 stloc soma
 ldloc i
@@ -44,7 +44,7 @@ div
 call void [mscorlib]System.Console::Write(float64)
 ret
 }
-.method public static float64 _média(float64 n1,float64 n2) {
+.method public static float64 _media(float64 n1,float64 n2) {
 ldarg n1
 ldarg n2
 add
@@ -52,7 +52,7 @@ ldc.i8 2
 div
 ret
 }
-.method public static void _cargaHorária() {
+.method public static void _cargaHoraria() {
 .locals(int64 CH)
 .locals(string disciplina)
 ldstr "qual a disciplina? "

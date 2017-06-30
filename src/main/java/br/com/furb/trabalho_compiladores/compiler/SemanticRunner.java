@@ -1,5 +1,6 @@
 package br.com.furb.trabalho_compiladores.compiler;
 
+import java.text.Normalizer;
 import java.util.*;
 
 class SemanticRunner {
@@ -330,7 +331,7 @@ class SemanticRunner {
     }
 
     void run23(final String lexeme) {
-        this.ids.add(lexeme);
+        this.ids.add(this.normalizeString(lexeme));
     }
 
     void run24(Token token) throws SemanticError {
@@ -456,7 +457,7 @@ class SemanticRunner {
     }
 
     void run33(Token token) throws SemanticError {
-        String lexeme = token.getLexeme();
+        String lexeme = this.normalizeString(token.getLexeme());
         if (this.symbolTable.containsKey(lexeme)) {
             throw new SemanticError(token + " já declarado", token.getPosition());
         }
@@ -508,9 +509,10 @@ class SemanticRunner {
     }
 
     void run37(String lexeme) {
+        lexeme = this.normalizeString(lexeme);
         Symbol moduleSymbol = this.symbolTable.get(lexeme);
 
-        StringBuilder moduleDeclaration = new StringBuilder(".method public static " + moduleSymbol.type + " _" + lexeme + "(");
+        StringBuilder moduleDeclaration = new StringBuilder(".method public static " + moduleSymbol.type + " " + lexeme + "(");
 
         if (moduleSymbol.parameters != null) {
             List<Parameter> parameters = moduleSymbol.parameters;
@@ -539,7 +541,7 @@ class SemanticRunner {
 
         Symbol moduleSymbol = this.symbolTable.get(moduleName);
 
-        StringBuilder callModule = new StringBuilder("call void _Principal::_" + moduleName + "(");
+        StringBuilder callModule = new StringBuilder("call void _Principal::" + moduleName + "(");
 
         if (moduleSymbol.parameters != null) {
             List<Parameter> parameters = moduleSymbol.parameters;
@@ -567,7 +569,7 @@ class SemanticRunner {
 
         Symbol moduleSymbol = this.symbolTable.get(moduleName);
 
-        StringBuilder callModule = new StringBuilder("call " + moduleSymbol.type + " _Principal::_" + moduleName + "(");
+        StringBuilder callModule = new StringBuilder("call " + moduleSymbol.type + " _Principal::" + moduleName + "(");
 
         if (moduleSymbol.parameters != null) {
             List<Parameter> parameters = moduleSymbol.parameters;
@@ -603,6 +605,16 @@ class SemanticRunner {
 
     private boolean isString(final String type) {
         return type.equals(DataType.STRING);
+    }
+
+    private String normalizeString(String lexeme) {
+        if (!Normalizer.isNormalized(lexeme, Normalizer.Form.NFD)) {
+            lexeme = "_" + lexeme;
+        }
+
+        return Normalizer
+                .normalize(lexeme, Normalizer.Form.NFD)
+                .replaceAll("[^\\p{ASCII}]", "");
     }
 
 }
