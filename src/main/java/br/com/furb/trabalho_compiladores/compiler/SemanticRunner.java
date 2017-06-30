@@ -7,7 +7,7 @@ class SemanticRunner {
     private String moduleName;
 
     class Symbol {
-        public Symbol(String type, String from, List<Parameter> parameters) {
+        Symbol(String type, String from, List<Parameter> parameters) {
             this.type = type;
             this.from = from;
             this.parameters = parameters;
@@ -19,7 +19,7 @@ class SemanticRunner {
     }
 
     class Parameter {
-        public Parameter(String id, String type) {
+        Parameter(String id, String type) {
             this.id = id;
             this.type = type;
         }
@@ -401,7 +401,6 @@ class SemanticRunner {
         Symbol symbol = this.symbolTable.get(id);
         this.idType = symbol.type;
         this.types.push(this.idType);
-        // TODO verificar se id é variavel ou parametro formal.
 
         if (symbol.from.equals("V")) {
             this.appendSourceCode("ldloc " + id);
@@ -409,18 +408,6 @@ class SemanticRunner {
             this.appendSourceCode("ldarg " + id);
         }
     }
-//	void run26(String lexeme) throws SemanticError {
-//		final String id = lexeme;
-//
-//		if (!this.symbolTable.containsKey(id)) {
-//			throw new SemanticError("Identificador não declarado.");
-//		}
-//
-//		this.idType = this.symbolTable.get(id).type;
-//		this.types.push(this.idType);
-//		// TODO verificar se id é variavel ou parametro formal.
-//		this.appendSourceCode("ldloc " + id);
-//	}
 
     void run27(Token token) throws SemanticError {
         String id = this.ids.get(this.ids.size() - 1);
@@ -471,13 +458,9 @@ class SemanticRunner {
     void run33(String lexeme) {
         this.symbolTable.put(lexeme, null);
         this.moduleName = lexeme;
-//		this.ids.add(lexeme);
     }
 
     void run34(String lexeme) {
-//		String id = this.ids.get(this.ids.size() - 1);
-
-//		this.ids.remove(id);
         this.symbolTable.remove(this.moduleName);
 
         List<Parameter> parameters = new ArrayList<>();
@@ -504,9 +487,6 @@ class SemanticRunner {
     }
 
     void run35() {
-//		String id = this.ids.get(this.ids.size() - 1);
-//		this.ids.remove(this.ids.size() - 1);
-        //this.symbolTable.get(id);
         this.symbolTable.put(this.moduleName, new Symbol(DataType.VOID, "P", null));
     }
 
@@ -519,8 +499,6 @@ class SemanticRunner {
             }
 
             this.symbolTable.put(id, new Symbol(this.idType, "F", null));
-
-//            this.ids.clear();
         }
     }
 
