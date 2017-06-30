@@ -1,0 +1,9 @@
+algoritmo "exemplo 04"
+variáveis CH: inteiro;
+início
+    repita
+        escreva ("qual o CH de compiladores? ");
+        leia (CH);
+    até CH > 17;
+    escreva ("total de créditos: ", CH / 18);
+fim
