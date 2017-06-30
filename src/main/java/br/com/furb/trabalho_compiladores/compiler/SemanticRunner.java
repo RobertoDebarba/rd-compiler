@@ -4,6 +4,28 @@ import java.util.*;
 
 class SemanticRunner {
 
+    private String moduleName;
+
+    class Symbol {
+        public Symbol(String type, List<Parameter> parameters) {
+            this.type = type;
+            this.parameters = parameters;
+        }
+
+        String type;
+        List<Parameter> parameters;
+    }
+
+    class Parameter {
+        public Parameter(String id, String type) {
+            this.id = id;
+            this.type = type;
+        }
+
+        String id;
+        String type;
+    }
+
 	private static final String SPACE = " ";
 	private static final String LINE_BREAK = "\n";
 	private static final String SCAPED_LINE_BREAK = "\"\\n\"";
@@ -13,7 +35,7 @@ class SemanticRunner {
 	private final StringBuilder sourceCode = new StringBuilder();
 	private final Stack<String> types = new Stack<>();
 	private final List<String> ids = new ArrayList<>();
-	private final Map<String, String> symbolTable = new HashMap<>();
+	private final Map<String, Symbol> symbolTable = new HashMap<>();
 	private int LabelCounter = 0;
 	private final Stack<String> labelIf = new Stack<>();
 	private final Stack<String> labelRepeat = new Stack<>();
@@ -321,7 +343,7 @@ class SemanticRunner {
 				throw new SemanticError("identificador já declarado");
 			}
 
-			this.symbolTable.put(id, this.idType);
+			this.symbolTable.put(id, new Symbol(this.idType, null));
 			this.appendSourceCode(".locals(" + this.idType + " " + id + ")");
 
 			this.ids.clear();
@@ -334,7 +356,7 @@ class SemanticRunner {
 				throw new SemanticError("Identificador não declarado");
 			}
 
-			this.idType = this.symbolTable.get(id);
+			this.idType = this.symbolTable.get(id).type;
 			this.appendSourceCode("call string [mscorlib]System.Console::ReadLine()");
 
 			switch (this.idType) {
@@ -352,28 +374,41 @@ class SemanticRunner {
 		}
 	}
 
-	void run26(String lexeme) throws SemanticError {
-		final String id = lexeme;
+	void run26() throws SemanticError {
+		final String id = this.ids.get(this.ids.size() - 1);
+		this.ids.remove(this.ids.size() - 1);
 
 		if (!this.symbolTable.containsKey(id)) {
 			throw new SemanticError("Identificador não declarado.");
 		}
 
-		this.idType = this.symbolTable.get(id);
+		this.idType = this.symbolTable.get(id).type;
 		this.types.push(this.idType);
 		// TODO verificar se id é variavel ou parametro formal.
 		this.appendSourceCode("ldloc " + id);
 	}
+//	void run26(String lexeme) throws SemanticError {
+//		final String id = lexeme;
+//
+//		if (!this.symbolTable.containsKey(id)) {
+//			throw new SemanticError("Identificador não declarado.");
+//		}
+//
+//		this.idType = this.symbolTable.get(id).type;
+//		this.types.push(this.idType);
+//		// TODO verificar se id é variavel ou parametro formal.
+//		this.appendSourceCode("ldloc " + id);
+//	}
 
 	void run27() throws SemanticError {
 		String id = this.ids.get(this.ids.size() - 1);
-		this.ids.remove(id);
+		this.ids.remove(this.ids.size() - 1);
 
 		if (!this.symbolTable.containsKey(id)) {
 			throw new SemanticError("Identificador não declarado.");
 		}
 
-		String idType = this.symbolTable.get(id);
+		String idType = this.symbolTable.get(id).type;
 		String expressionType = this.types.pop();
 
 		if (!idType.equalsIgnoreCase(expressionType)) {
@@ -412,31 +447,129 @@ class SemanticRunner {
 	}
 
 	void run33(String lexeme) {
-		this.symbolTable.put(lexeme, DataType.VOID);
-		this.ids.add(lexeme);
+		this.symbolTable.put(lexeme, null);
+		this.moduleName = lexeme;
+//		this.ids.add(lexeme);
 	}
 
 	void run34(String lexeme) {
-		String id = this.ids.get(this.ids.size() - 1);
-		this.ids.remove(id);
-		//this.symbolTable.get(id);
-		if (lexeme == "inteiro") {
-			this.symbolTable.put(id, DataType.INT);
-		} else if (lexeme == "real") {
-			this.symbolTable.put(id, DataType.FLOAT);
-		} else if (lexeme == "caracter") {
-			this.symbolTable.put(id, DataType.STRING);
-		} else if (lexeme == "lógico") {
-			this.symbolTable.put(id, DataType.BOOLEAN);
-		}
+//		String id = this.ids.get(this.ids.size() - 1);
+
+//		this.ids.remove(id);
+		this.symbolTable.remove(this.moduleName);
+
+        List<Parameter> parameters = new ArrayList<>();
+        for (String id: this.ids) {
+            parameters.add(new Parameter(id, this.idType));
+        }
+        switch (lexeme) {
+            case "inteiro":
+                this.symbolTable.put(this.moduleName, new Symbol(DataType.INT, parameters));
+                break;
+            case "real":
+                this.symbolTable.put(this.moduleName, new Symbol(DataType.FLOAT, parameters));
+                break;
+            case "caracter":
+                this.symbolTable.put(this.moduleName, new Symbol(DataType.STRING, parameters));
+                break;
+            case "lógico":
+                this.symbolTable.put(this.moduleName, new Symbol(DataType.BOOLEAN, parameters));
+                break;
+        }
+
+        this.ids.clear();
 	}
 
 	void run35() {
 		String id = this.ids.get(this.ids.size() - 1);
-		this.ids.remove(id);
+		this.ids.remove(this.ids.size() - 1);
 		//this.symbolTable.get(id);
-		this.symbolTable.put(id, DataType.VOID);
+		this.symbolTable.put(id, new Symbol(DataType.VOID, null));
 	}
+
+	void run36() throws SemanticError {
+        switch (this.idType) {
+            case "int":
+                this.idType = "int64";
+                break;
+            case "real":
+                this.idType = "float64";
+                break;
+        }
+
+        for (String id : this.ids) {
+            if (this.symbolTable.containsKey(id)) {
+                throw new SemanticError("identificador já declarado");
+            }
+
+            this.symbolTable.put(id, new Symbol(this.idType, null));
+
+//            this.ids.clear();
+        }
+    }
+
+    void run37(String lexeme) {
+        Symbol moduleSymbol = this.symbolTable.get(lexeme);
+
+        StringBuilder moduleDeclaration = new StringBuilder(".method public static " + moduleSymbol.type + " _" + lexeme + "(");
+
+        List<Parameter> parameters = moduleSymbol.parameters;
+        for (int i = 0; i < parameters.size(); i++) {
+            Parameter parameter = parameters.get(i);
+
+            moduleDeclaration.append(parameter.type).append(" ").append(parameter.id);
+            if (i < parameters.size() - 1) {
+                moduleDeclaration.append(",");
+            }
+        }
+        moduleDeclaration.append(") {");
+
+
+        this.appendSourceCode(moduleDeclaration.toString());
+    }
+
+    void run38() {
+        String moduleName = this.ids.get(this.ids.size() - 1);
+        this.ids.remove(this.ids.size() - 1);
+        Symbol moduleSymbol = this.symbolTable.get(moduleName);
+
+        StringBuilder callModule = new StringBuilder("call void _Principal::_" + moduleName + "(");
+
+        List<Parameter> parameters = moduleSymbol.parameters;
+        for (int i = 0; i < parameters.size(); i++) {
+            Parameter parameter = parameters.get(i);
+
+            callModule.append(parameter.type);
+            if (i < parameters.size() - 1) {
+                callModule.append(",");
+            }
+        }
+        callModule.append(")");
+
+        this.appendSourceCode(callModule.toString());
+    }
+
+    void run39() {
+        String moduleName = this.ids.get(this.ids.size() - 1);
+        this.ids.remove(this.ids.size() - 1);
+
+        Symbol moduleSymbol = this.symbolTable.get(moduleName);
+
+        StringBuilder callModule = new StringBuilder("call " + moduleSymbol.type + " _Principal::_" + moduleName + "(");
+
+        List<Parameter> parameters = moduleSymbol.parameters;
+        for (int i = 0; i < parameters.size(); i++) {
+            Parameter parameter = parameters.get(i);
+
+            callModule.append(parameter.type);
+            if (i < parameters.size() - 1) {
+                callModule.append(",");
+            }
+        }
+        callModule.append(")");
+
+        this.appendSourceCode(callModule.toString());
+    }
 
 	private void appendSourceCode(final String sourceCode) {
 		this.sourceCode.append(sourceCode).append(LINE_BREAK);
