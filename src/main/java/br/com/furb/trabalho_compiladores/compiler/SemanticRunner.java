@@ -194,15 +194,19 @@ class SemanticRunner {
 			this.appendSourceCode(DotNetCommands.CGT);
 			break;
 		case RelationalOperator.NOT_EQUAL:
-			this.appendSourceCode(DotNetCommands.CGT);
-			this.appendSourceCode(DotNetCommands.LDC_I4_1);
-			this.appendSourceCode(DotNetCommands.XOR);
+			this.appendSourceCode(DotNetCommands.CEQ);
+			this.appendSourceCode(DotNetCommands.LDC_I4_0);
+			this.appendSourceCode(DotNetCommands.CEQ);
 			break;
 		case RelationalOperator.LESS_THAN_OR_EQUAL:
-			// TODO demais operadores
+			this.appendSourceCode(DotNetCommands.CLT);
+			this.appendSourceCode(DotNetCommands.LDC_I4_0);
+			this.appendSourceCode(DotNetCommands.CEQ);
 			break;
 		case RelationalOperator.GREATER_THAN_OR_EQUAL:
-			// TODO demais operadores
+			this.appendSourceCode(DotNetCommands.CGT);
+			this.appendSourceCode(DotNetCommands.LDC_I4_0);
+			this.appendSourceCode(DotNetCommands.CEQ);
 			break;
 		}
 	}
