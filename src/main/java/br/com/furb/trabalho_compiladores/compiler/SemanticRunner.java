@@ -485,10 +485,10 @@ class SemanticRunner {
 	}
 
 	void run35() {
-		String id = this.ids.get(this.ids.size() - 1);
-		this.ids.remove(this.ids.size() - 1);
+//		String id = this.ids.get(this.ids.size() - 1);
+//		this.ids.remove(this.ids.size() - 1);
 		//this.symbolTable.get(id);
-		this.symbolTable.put(id, new Symbol(DataType.VOID, null));
+		this.symbolTable.put(this.moduleName, new Symbol(DataType.VOID, null));
 	}
 
 	void run36(Token token) throws SemanticError {
@@ -517,15 +517,17 @@ class SemanticRunner {
 
         StringBuilder moduleDeclaration = new StringBuilder(".method public static " + moduleSymbol.type + " _" + lexeme + "(");
 
-        List<Parameter> parameters = moduleSymbol.parameters;
-        for (int i = 0; i < parameters.size(); i++) {
-            Parameter parameter = parameters.get(i);
+		if (moduleSymbol.parameters != null) {
+			List<Parameter> parameters = moduleSymbol.parameters;
+			for (int i = 0; i < parameters.size(); i++) {
+				Parameter parameter = parameters.get(i);
 
-            moduleDeclaration.append(parameter.type).append(" ").append(parameter.id);
-            if (i < parameters.size() - 1) {
-                moduleDeclaration.append(",");
-            }
-        }
+				moduleDeclaration.append(parameter.type).append(" ").append(parameter.id);
+				if (i < parameters.size() - 1) {
+					moduleDeclaration.append(",");
+				}
+			}
+		}
         moduleDeclaration.append(") {");
 
 
@@ -539,15 +541,17 @@ class SemanticRunner {
 
         StringBuilder callModule = new StringBuilder("call void _Principal::_" + moduleName + "(");
 
-        List<Parameter> parameters = moduleSymbol.parameters;
-        for (int i = 0; i < parameters.size(); i++) {
-            Parameter parameter = parameters.get(i);
+        if (moduleSymbol.parameters != null) {
+			List<Parameter> parameters = moduleSymbol.parameters;
+			for (int i = 0; i < parameters.size(); i++) {
+				Parameter parameter = parameters.get(i);
 
-            callModule.append(parameter.type);
-            if (i < parameters.size() - 1) {
-                callModule.append(",");
-            }
-        }
+				callModule.append(parameter.type);
+				if (i < parameters.size() - 1) {
+					callModule.append(",");
+				}
+			}
+		}
         callModule.append(")");
 
         this.appendSourceCode(callModule.toString());
@@ -561,15 +565,17 @@ class SemanticRunner {
 
         StringBuilder callModule = new StringBuilder("call " + moduleSymbol.type + " _Principal::_" + moduleName + "(");
 
-        List<Parameter> parameters = moduleSymbol.parameters;
-        for (int i = 0; i < parameters.size(); i++) {
-            Parameter parameter = parameters.get(i);
+        if (moduleSymbol.parameters != null) {
+			List<Parameter> parameters = moduleSymbol.parameters;
+			for (int i = 0; i < parameters.size(); i++) {
+				Parameter parameter = parameters.get(i);
 
-            callModule.append(parameter.type);
-            if (i < parameters.size() - 1) {
-                callModule.append(",");
-            }
-        }
+				callModule.append(parameter.type);
+				if (i < parameters.size() - 1) {
+					callModule.append(",");
+				}
+			}
+		}
         callModule.append(")");
 
         this.appendSourceCode(callModule.toString());
