@@ -330,7 +330,7 @@ class SemanticRunner {
 	void run24(Token token) throws SemanticError {
 
 		switch (this.idType) {
-		case "int":
+		case "inteiro":
 			this.idType = "int64";
 			break;
 		case "real":
@@ -489,7 +489,7 @@ class SemanticRunner {
 
 	void run36(Token token) throws SemanticError {
         switch (this.idType) {
-            case "int":
+            case "inteiro":
                 this.idType = "int64";
                 break;
             case "real":
