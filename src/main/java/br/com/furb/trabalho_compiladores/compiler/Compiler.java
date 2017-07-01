@@ -30,6 +30,7 @@ public final class Compiler {
             return COMPILED_SUCCESSFULLY_MESSAGE;
         } catch (final LexicalError e) {
             this.isCompilationSuccessed = false;
+            e.printStackTrace();
 
             if (e.getMessage().equals(INVALID_TOKEN_MESSAGE)) {
                 return String.format(INVALID_TOKEN_LINE_ERROR_MESSAGE, findLine(sourceCode, e.getPosition()), sourceCode.charAt(e.getPosition()),
@@ -39,6 +40,7 @@ public final class Compiler {
             }
         } catch (final SyntaticError e) {
             this.isCompilationSuccessed = false;
+            e.printStackTrace();
 
             String token = e.getToken();
             if (token.equals(END_OF_FILE_TOKEN)) {
@@ -47,7 +49,7 @@ public final class Compiler {
             return String.format(GENERIC_LINE_ERROR_MESSAGE, findLine(sourceCode, e.getPosition()), String.format(e.getMessage(), token));
         } catch (final SemanticError e) {
             this.isCompilationSuccessed = false;
-            e.printStackTrace();//TODO stack e token na mensagem do semantico
+            e.printStackTrace();
 
             return String.format(GENERIC_LINE_ERROR_MESSAGE, findLine(sourceCode, e.getPosition()), e.getMessage());
         }

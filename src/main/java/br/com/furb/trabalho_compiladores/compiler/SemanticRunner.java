@@ -344,12 +344,12 @@ class SemanticRunner {
         for (String id : this.ids) {
             if (this.isFunctionOrProcedure()) {
                 if (this.symbolTableLocal.containsKey(id)) {
-                    throw new SemanticError(token + " já declarado", token.getPosition());
+                    throw new SemanticError(id + " já declarado", token.getPosition());
                 }
                 this.symbolTableLocal.put(id, new Symbol(this.idType, "V", null));
             } else {
                 if (this.symbolTable.containsKey(id)) {
-                    throw new SemanticError(token + " já declarado", token.getPosition());
+                    throw new SemanticError(id + " já declarado", token.getPosition());
                 }
                 this.symbolTable.put(id, new Symbol(this.idType, "V", null));
             }
@@ -382,7 +382,7 @@ class SemanticRunner {
         for (String id : this.ids) {
             if (this.isFunctionOrProcedure()) {
                 if (!this.symbolTableLocal.containsKey(id) && !this.symbolTable.containsKey(id)) {
-                    throw new SemanticError(token + " não declarado", token.getPosition());
+                    throw new SemanticError(id + " não declarado", token.getPosition());
                 }
 
                 Symbol symbol = this.symbolTableLocal.get(id);
@@ -393,7 +393,7 @@ class SemanticRunner {
                 this.idType = symbol.type;
             } else {
                 if (!this.symbolTable.containsKey(id)) {
-                    throw new SemanticError(token + " não declarado", token.getPosition());
+                    throw new SemanticError(id + " não declarado", token.getPosition());
                 }
 
                 this.idType = this.symbolTable.get(id).type;
@@ -423,7 +423,7 @@ class SemanticRunner {
         Symbol symbol;
         if (this.isFunctionOrProcedure()) {
             if (!this.symbolTableLocal.containsKey(id) && !this.symbolTable.containsKey(id)) {
-                throw new SemanticError(token + " não declarado.", token.getPosition());
+                throw new SemanticError(id + " não declarado.", token.getPosition());
             }
 
             symbol = this.symbolTableLocal.get(id);
@@ -432,7 +432,7 @@ class SemanticRunner {
             }
         } else {
             if (!this.symbolTable.containsKey(id)) {
-                throw new SemanticError(token + " não declarado.", token.getPosition());
+                throw new SemanticError(id + " não declarado.", token.getPosition());
             }
 
             symbol = this.symbolTable.get(id);
@@ -455,7 +455,7 @@ class SemanticRunner {
         String idType;
         if (this.isFunctionOrProcedure()) {
             if (!this.symbolTableLocal.containsKey(id) && !this.symbolTable.containsKey(id)) {
-                throw new SemanticError(token + " não declarado.", token.getPosition());
+                throw new SemanticError(id + " não declarado.", token.getPosition());
             }
 
             idType = this.symbolTableLocal.get(id).type;
@@ -464,7 +464,7 @@ class SemanticRunner {
             }
         } else {
             if (!this.symbolTable.containsKey(id)) {
-                throw new SemanticError(token + " não declarado.", token.getPosition());
+                throw new SemanticError(id + " não declarado.", token.getPosition());
             }
 
             idType = this.symbolTable.get(id).type;
@@ -510,7 +510,7 @@ class SemanticRunner {
     void run33(Token token) throws SemanticError {
         String lexeme = this.normalizeString(token.getLexeme());
         if (this.symbolTable.containsKey(lexeme)) {
-            throw new SemanticError(token + " já declarado", token.getPosition());
+            throw new SemanticError(lexeme + " já declarado", token.getPosition());
         }
 
 //        this.symbolTable.put(lexeme, null);
