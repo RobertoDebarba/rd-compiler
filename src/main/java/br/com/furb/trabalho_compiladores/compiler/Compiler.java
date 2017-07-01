@@ -47,6 +47,7 @@ public final class Compiler {
             return String.format(GENERIC_LINE_ERROR_MESSAGE, findLine(sourceCode, e.getPosition()), String.format(e.getMessage(), token));
         } catch (final SemanticError e) {
             this.isCompilationSuccessed = false;
+            e.printStackTrace();//TODO stack e token na mensagem do semantico
 
             return String.format(GENERIC_LINE_ERROR_MESSAGE, findLine(sourceCode, e.getPosition()), e.getMessage());
         }

@@ -39,6 +39,7 @@ class SemanticRunner {
     private final Stack<String> types = new Stack<>();
     private final List<String> ids = new ArrayList<>();
     private final Map<String, Symbol> symbolTable = new HashMap<>();
+    private Map<String, Symbol> symbolTableLocal = null;
     private int LabelCounter = 0;
     private final Stack<String> labelIf = new Stack<>();
     private final Stack<String> labelRepeat = new Stack<>();
@@ -266,6 +267,8 @@ class SemanticRunner {
     void run16() {
         this.appendSourceCode(DotNetCommands.RET);
         this.appendSourceCode(DotNetCommands.CLOSE_BRACES);
+
+        this.symbolTableLocal = null;
     }
 
     /**
@@ -339,11 +342,19 @@ class SemanticRunner {
         convertType();
 
         for (String id : this.ids) {
-            if (this.symbolTable.containsKey(id)) {
-                throw new SemanticError(token + " já declarado", token.getPosition());
+            if (this.isFunctionOrProcedure()) {
+                if (this.symbolTableLocal.containsKey(id)) {
+                    throw new SemanticError(token + " já declarado", token.getPosition());
+                }
+                this.symbolTableLocal.put(id, new Symbol(this.idType, "V", null));
+            } else {
+                if (this.symbolTable.containsKey(id)) {
+                    throw new SemanticError(token + " já declarado", token.getPosition());
+                }
+                this.symbolTable.put(id, new Symbol(this.idType, "V", null));
             }
 
-            this.symbolTable.put(id, new Symbol(this.idType, "V", null));
+
             this.appendSourceCode(".locals(" + this.idType + " " + id + ")");
 
         }
@@ -369,11 +380,25 @@ class SemanticRunner {
 
     void run25(Token token) throws SemanticError {
         for (String id : this.ids) {
-            if (!this.symbolTable.containsKey(id)) {
-                throw new SemanticError(token + " não declarado", token.getPosition());
+            if (this.isFunctionOrProcedure()) {
+                if (!this.symbolTableLocal.containsKey(id) && !this.symbolTable.containsKey(id)) {
+                    throw new SemanticError(token + " não declarado", token.getPosition());
+                }
+
+                Symbol symbol = this.symbolTableLocal.get(id);
+                if (symbol == null) {
+                    symbol = this.symbolTable.get(id);
+                }
+
+                this.idType = symbol.type;
+            } else {
+                if (!this.symbolTable.containsKey(id)) {
+                    throw new SemanticError(token + " não declarado", token.getPosition());
+                }
+
+                this.idType = this.symbolTable.get(id).type;
             }
 
-            this.idType = this.symbolTable.get(id).type;
             this.appendSourceCode("call string [mscorlib]System.Console::ReadLine()");
 
             switch (this.idType) {
@@ -395,15 +420,28 @@ class SemanticRunner {
         final String id = this.ids.get(this.ids.size() - 1);
         this.ids.remove(this.ids.size() - 1);
 
-        if (!this.symbolTable.containsKey(id)) {
-            throw new SemanticError(token + " não declarado.", token.getPosition());
+        Symbol symbol;
+        if (this.isFunctionOrProcedure()) {
+            if (!this.symbolTableLocal.containsKey(id) && !this.symbolTable.containsKey(id)) {
+                throw new SemanticError(token + " não declarado.", token.getPosition());
+            }
+
+            symbol = this.symbolTableLocal.get(id);
+            if (symbol == null) {
+                symbol = this.symbolTable.get(id);
+            }
+        } else {
+            if (!this.symbolTable.containsKey(id)) {
+                throw new SemanticError(token + " não declarado.", token.getPosition());
+            }
+
+            symbol = this.symbolTable.get(id);
         }
 
-        Symbol symbol = this.symbolTable.get(id);
         this.idType = symbol.type;
         this.types.push(this.idType);
 
-        if (symbol.from.equals("V")) {
+        if (symbol.from != null && symbol.from.equals("V")) {
             this.appendSourceCode("ldloc " + id);
         } else {
             this.appendSourceCode("ldarg " + id);
@@ -414,11 +452,24 @@ class SemanticRunner {
         String id = this.ids.get(this.ids.size() - 1);
         this.ids.remove(this.ids.size() - 1);
 
-        if (!this.symbolTable.containsKey(id)) {
-            throw new SemanticError(token + " não declarado.", token.getPosition());
+        String idType;
+        if (this.isFunctionOrProcedure()) {
+            if (!this.symbolTableLocal.containsKey(id) && !this.symbolTable.containsKey(id)) {
+                throw new SemanticError(token + " não declarado.", token.getPosition());
+            }
+
+            idType = this.symbolTableLocal.get(id).type;
+            if (idType == null) {
+                idType = this.symbolTable.get(id).type;
+            }
+        } else {
+            if (!this.symbolTable.containsKey(id)) {
+                throw new SemanticError(token + " não declarado.", token.getPosition());
+            }
+
+            idType = this.symbolTable.get(id).type;
         }
 
-        String idType = this.symbolTable.get(id).type;
         String expressionType = this.types.pop();
 
         if (!idType.equalsIgnoreCase(expressionType)) {
@@ -462,34 +513,29 @@ class SemanticRunner {
             throw new SemanticError(token + " já declarado", token.getPosition());
         }
 
-        this.symbolTable.put(lexeme, null);
+//        this.symbolTable.put(lexeme, null);
         this.moduleName = lexeme;
     }
 
     void run34(String lexeme) {
+        Symbol symbol = this.symbolTable.get(this.moduleName);
         this.symbolTable.remove(this.moduleName);
 
-        List<Parameter> parameters = new ArrayList<>();
-        for (String id : this.ids) {
-            convertType();
-            parameters.add(new Parameter(id, this.idType));
-        }
         switch (lexeme) {
             case "inteiro":
-                this.symbolTable.put(this.moduleName, new Symbol(DataType.INT, "F", parameters));
+                this.symbolTable.put(this.moduleName, new Symbol(DataType.INT, "F", symbol.parameters));
                 break;
             case "real":
-                this.symbolTable.put(this.moduleName, new Symbol(DataType.FLOAT, "F", parameters));
+                this.symbolTable.put(this.moduleName, new Symbol(DataType.FLOAT, "F", symbol.parameters));
                 break;
             case "caracter":
-                this.symbolTable.put(this.moduleName, new Symbol(DataType.STRING, "F", parameters));
+                this.symbolTable.put(this.moduleName, new Symbol(DataType.STRING, "F", symbol.parameters));
                 break;
             case "lógico":
-                this.symbolTable.put(this.moduleName, new Symbol(DataType.BOOLEAN, "F", parameters));
+                this.symbolTable.put(this.moduleName, new Symbol(DataType.BOOLEAN, "F", symbol.parameters));
                 break;
         }
 
-        this.ids.clear();
     }
 
     void run35() {
@@ -498,17 +544,23 @@ class SemanticRunner {
 
     void run36(Token token) throws SemanticError {
         convertType();
-
+        List<Parameter> parameters = new ArrayList<>();
         for (String id : this.ids) {
             if (this.symbolTable.containsKey(id)) {
                 throw new SemanticError("identificador já declarado", token.getPosition());
             }
 
-            this.symbolTable.put(id, new Symbol(this.idType, "F", null));
+            parameters.add(new Parameter(id, this.idType));
         }
+
+        this.symbolTable.put(this.moduleName, new Symbol(this.idType, null, parameters));//TODO id tipo parametro
+
+        this.ids.clear();
     }
 
     void run37(String lexeme) {
+        this.symbolTableLocal = new HashMap<>();
+
         lexeme = this.normalizeString(lexeme);
         Symbol moduleSymbol = this.symbolTable.get(lexeme);
 
@@ -523,10 +575,11 @@ class SemanticRunner {
                 if (i < parameters.size() - 1) {
                     moduleDeclaration.append(",");
                 }
+
+                this.symbolTableLocal.put(parameter.id, new Symbol(parameter.type, null, null));
             }
         }
         moduleDeclaration.append(") {");
-
 
         this.appendSourceCode(moduleDeclaration.toString());
     }
@@ -615,6 +668,10 @@ class SemanticRunner {
         return Normalizer
                 .normalize(lexeme, Normalizer.Form.NFD)
                 .replaceAll("[^\\p{ASCII}]", "");
+    }
+
+    private boolean isFunctionOrProcedure() {
+        return this.symbolTableLocal != null;
     }
 
 }
