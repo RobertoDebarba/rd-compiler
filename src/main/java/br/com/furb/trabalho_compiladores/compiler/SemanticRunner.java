@@ -644,6 +644,10 @@ class SemanticRunner {
         this.sourceCode.append(sourceCode).append(LINE_BREAK);
     }
 
+    public StringBuilder getSourceCode() {
+        return sourceCode;
+    }
+
     private boolean isBoolean(final String type) {
         return type.equals(DataType.BOOLEAN);
     }
