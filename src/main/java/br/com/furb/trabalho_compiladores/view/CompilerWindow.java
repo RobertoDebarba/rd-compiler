@@ -75,6 +75,9 @@ public final class CompilerWindow extends JFrame {
         codeTextArea.setBorder(new NumberedBorder());
         codePanel.setViewportView(codeTextArea);
 
+        messageTextArea.setName("messageTextArea");
+        codeTextArea.setName("codeTextArea");
+
         messageTextArea.setEditable(false);
         messagePanel.setViewportView(messageTextArea);
 
@@ -115,6 +118,7 @@ public final class CompilerWindow extends JFrame {
         buttonsPanel.add(cutButton);
 
         final JButton compileButton = new JButton(COMPILE_F8);
+        compileButton.setName("compileButton");
         compileButton.setIcon(new ImageIcon(getClass().getResource(PLAY_ICON)));
         compileButton.setVerticalTextPosition(SwingConstants.BOTTOM);
         compileButton.setHorizontalTextPosition(SwingConstants.CENTER);
@@ -127,6 +131,7 @@ public final class CompilerWindow extends JFrame {
         buttonsPanel.add(buildButton);
 
         final JButton teamButton = new JButton(TEAM_F1);
+        teamButton.setName("teamButton");
         teamButton.setIcon(new ImageIcon(getClass().getResource(TEAM_ICON)));
         teamButton.setVerticalTextPosition(SwingConstants.BOTTOM);
         teamButton.setHorizontalTextPosition(SwingConstants.CENTER);
