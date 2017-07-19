@@ -100,18 +100,21 @@ public final class CompilerWindow extends JFrame {
         buttonsPanel.add(saveButton);
 
         final JButton copyButton = new JButton(COPY_CTRL_C);
+        copyButton.setName("copyButton");
         copyButton.setIcon(new ImageIcon(getClass().getResource(COPY_ICON)));
         copyButton.setVerticalTextPosition(SwingConstants.BOTTOM);
         copyButton.setHorizontalTextPosition(SwingConstants.CENTER);
         buttonsPanel.add(copyButton);
 
         final JButton pasteButton = new JButton(PASTE_CTRL_V);
+        pasteButton.setName("pasteButton");
         pasteButton.setIcon(new ImageIcon(getClass().getResource(PASTE_ICON)));
         pasteButton.setVerticalTextPosition(SwingConstants.BOTTOM);
         pasteButton.setHorizontalTextPosition(SwingConstants.CENTER);
         buttonsPanel.add(pasteButton);
 
         final JButton cutButton = new JButton(CUT_CTRL_X);
+        cutButton.setName("cutButton");
         cutButton.setIcon(new ImageIcon(getClass().getResource(EDIT_ICON)));
         cutButton.setVerticalTextPosition(SwingConstants.BOTTOM);
         cutButton.setHorizontalTextPosition(SwingConstants.CENTER);

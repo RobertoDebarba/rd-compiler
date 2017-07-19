@@ -4,24 +4,23 @@ import br.com.furb.trabalho_compiladores.view.CompilerWindow;
 import br.com.furb.trabalho_compiladores.view.CompilerWindowFactory;
 import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.fixture.FrameFixture;
-import org.junit.After;
-import org.junit.Before;
+import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Test;
+
+import java.awt.*;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.StringSelection;
 
 public class MainWindowTest {
 
-    private FrameFixture window;
+    private static FrameFixture window;
 
-    @Before
-    public void setUp() {
+    @BeforeClass
+    public static void setUpClass() {
         CompilerWindow frame = GuiActionRunner.execute(CompilerWindowFactory::createInstance);
-        this.window = new FrameFixture(frame);
-        this.window.show();
-    }
-
-    @After
-    public void tearDown() throws Exception {
-        this.window.close();
+        window = new FrameFixture(frame);
+        window.show();
     }
 
     @Test
@@ -30,24 +29,62 @@ public class MainWindowTest {
                 "\tFrancisco Krautchuk Neto\r\n" +
                 "\tRoberto Luiz Debarba";
 
-        this.window.button("teamButton").click();
-        this.window.textBox("messageTextArea").requireText(expectedTeamMessage);
+        window.button("teamButton").click();
+        window.textBox("messageTextArea").requireText(expectedTeamMessage);
     }
 
     @Test
     public void testCompileSuccess() throws Exception {
-        this.window.textBox("codeTextArea").setText("algoritmo \"teste\" início fim");
-        this.window.button("compileButton").click();
+        window.textBox("codeTextArea").setText("algoritmo \"teste\" início fim");
+        window.button("compileButton").click();
 
-        this.window.textBox("messageTextArea").requireText("programa compilado com sucesso");
+        window.textBox("messageTextArea").requireText("programa compilado com sucesso");
     }
 
     @Test
     public void testCompileError() throws Exception {
-        this.window.textBox("codeTextArea").setText("algoritmo \"teste\" comeco");
-        this.window.button("compileButton").click();
+        window.textBox("codeTextArea").setText("algoritmo \"teste\" comeco");
+        window.button("compileButton").click();
 
-        this.window.textBox("messageTextArea").requireText("encontrado %s esperado função início procedimento variáveis");
+        window.textBox("messageTextArea").requireText("Erro na linha 1 – encontrado comeco esperado função início procedimento variáveis");
+    }
+
+    @Test
+    public void testCopyCode() throws Exception {
+        window.textBox("codeTextArea").setText("codigo");
+        window.textBox("codeTextArea").selectAll();
+        window.button("copyButton").click();
+
+        String clipboardContent = (String) Toolkit.getDefaultToolkit()
+                .getSystemClipboard().getData(DataFlavor.stringFlavor);
+
+        Assert.assertEquals("CopyButton doesnt work", "codigo", clipboardContent);
+    }
+
+    @Test
+    public void testPasteCode() throws Exception {
+        StringSelection clipboardContent = new StringSelection("codigoColado");
+        Toolkit.getDefaultToolkit()
+                .getSystemClipboard().setContents(clipboardContent, clipboardContent);
+
+        window.textBox("codeTextArea").setText("");
+        window.button("pasteButton").click();
+
+        window.textBox("codeTextArea").requireText("codigoColado");
+    }
+
+    @Test
+    public void testCutCode() throws Exception {
+        window.textBox("codeTextArea").setText("codigoRecortado");
+        window.textBox("codeTextArea").selectAll();
+        window.button("cutButton").click();
+
+        window.textBox("codeTextArea").requireText("");
+
+        String clipboardContent = (String) Toolkit.getDefaultToolkit()
+                .getSystemClipboard().getData(DataFlavor.stringFlavor);
+
+        Assert.assertEquals("CopyButton doesnt work", "codigoRecortado", clipboardContent);
     }
 
 }
