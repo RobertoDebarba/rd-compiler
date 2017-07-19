@@ -644,8 +644,12 @@ class SemanticRunner {
         this.sourceCode.append(sourceCode).append(LINE_BREAK);
     }
 
-    public StringBuilder getSourceCode() {
-        return sourceCode;
+    public String getSourceCode() {
+        return sourceCode.toString();
+    }
+
+    void addType(String dataType) {
+        this.types.add(dataType);
     }
 
     private boolean isBoolean(final String type) {
@@ -678,4 +682,15 @@ class SemanticRunner {
         return this.symbolTableLocal != null;
     }
 
+    public static String getSPACE() {
+        return SPACE;
+    }
+
+    public static String getLineBreak() {
+        return LINE_BREAK;
+    }
+
+    public static String getScapedLineBreak() {
+        return SCAPED_LINE_BREAK;
+    }
 }
