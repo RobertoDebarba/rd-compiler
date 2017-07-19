@@ -52,4 +52,14 @@ public class SemanticRunnerTest {
         steps.whenRunStep19(steps.getLogicalToken());
         steps.thenSourceCodeShouldContainsAndExpression();
     }
+
+    @Test
+    public void testRun10() throws Exception {
+        steps.givenStackTypesContains(DataType.STRING);
+        steps.givenStackTypesContains(DataType.STRING);
+
+        steps.whenRun10(steps.getLogicalToken());
+
+        steps.thenSourceCodeShouldThrowIncompatibleTypesException();
+    }
 }

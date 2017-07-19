@@ -7,6 +7,7 @@ class SemanticRunnerTestSteps {
     private SemanticRunner semanticRunner = new SemanticRunner();
     private Token validToken;
     private String validFileName;
+    private String exceptionMessage;
 
     void givenStackTypesContains(String type) {
         semanticRunner.addType(type);
@@ -26,6 +27,15 @@ class SemanticRunnerTestSteps {
 
     void whenRunStep1() throws SemanticError {
         semanticRunner.run1(validToken);
+    }
+
+    void whenRun10(Token token) throws SemanticError {
+        try {
+            semanticRunner.setOperator(">=");
+            semanticRunner.run10(token);
+        } catch (Exception e) {
+            exceptionMessage = e.getMessage();
+        }
     }
 
     void whenRunStep15() throws SemanticError {
@@ -66,5 +76,9 @@ class SemanticRunnerTestSteps {
 
     void thenSourceCodeShouldStartsWithProgramHeader() {
         Assert.assertEquals("Cabeçalho inválido", String.format(DotNetCommands.PROGRAM_HEADER, validFileName, validFileName) + "\n", semanticRunner.getSourceCode());
+    }
+
+    void thenSourceCodeShouldThrowIncompatibleTypesException() {
+        Assert.assertEquals("Operação lógica inválida", "tipos incompatíveis em operação relacional", exceptionMessage);
     }
 }

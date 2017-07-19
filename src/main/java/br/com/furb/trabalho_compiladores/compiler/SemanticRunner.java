@@ -173,6 +173,7 @@ class SemanticRunner {
         this.appendSourceCode(DotNetCommands.MUL);
     }
 
+
     /**
      * Operação relacional
      */
@@ -646,6 +647,10 @@ class SemanticRunner {
 
     public String getSourceCode() {
         return sourceCode.toString();
+    }
+
+    public void setOperator(String operator) {
+        this.operator = operator;
     }
 
     void addType(String dataType) {
