@@ -2,7 +2,7 @@ package br.com.furb.trabalho_compiladores.compiler;
 
 import java.util.Stack;
 
-final class Sintatico implements Constants {
+public class Sintatico implements Constants {
     private Stack stack = new Stack();
     private Token currentToken;
     private Token previousToken;

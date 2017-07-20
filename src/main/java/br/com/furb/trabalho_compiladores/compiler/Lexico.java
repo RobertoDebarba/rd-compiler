@@ -1,6 +1,6 @@
 package br.com.furb.trabalho_compiladores.compiler;
 
-final class Lexico implements Constants {
+public class Lexico implements Constants {
     private int position;
     private String input;
 

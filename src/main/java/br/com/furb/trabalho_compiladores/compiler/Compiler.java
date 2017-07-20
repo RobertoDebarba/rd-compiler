@@ -15,13 +15,19 @@ public final class Compiler {
     private static final char LINE_BREAK = '\n';
 
     private boolean isCompilationSuccessed = false;
+
     private Semantico semantico;
+    private final Lexico lexico;
+    private final Sintatico sintatico;
+
+    public Compiler(final Lexico lexico, final Sintatico sintatico) {
+        this.lexico = lexico;
+        this.sintatico = sintatico;
+    }
 
     public String compile(final String sourceCode, String fileName) {
         try {
-            final Lexico lexico = new Lexico();
             semantico = new Semantico(fileName.replace(SPACE_CHAR, UNDERLINE_CHAR));
-            final Sintatico sintatico = new Sintatico();
 
             lexico.setInput(sourceCode);
             sintatico.parse(lexico, semantico);

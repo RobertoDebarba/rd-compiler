@@ -1,6 +1,8 @@
 package br.com.furb.trabalho_compiladores.view;
 
 import br.com.furb.trabalho_compiladores.compiler.Compiler;
+import br.com.furb.trabalho_compiladores.compiler.Lexico;
+import br.com.furb.trabalho_compiladores.compiler.Sintatico;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -25,7 +27,7 @@ final class CompilerWindowHandler {
     private static final String NON_CHANGED_FILE = "não modificado - %s";
     private static final String NON_CHANGED = "não modificado";
 
-    private final Compiler compiler = new Compiler();
+    private final Compiler compiler = new Compiler(new Lexico(), new Sintatico());
     private Path filePath;
     private final JTextArea codeTextArea;
     private final JTextArea messageTextArea;
