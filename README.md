@@ -1,5 +1,7 @@
 # RD Compiler
 
+[![Build Status](https://travis-ci.org/RobertoDebarba/rd-compiler.svg?branch=master)](https://travis-ci.org/RobertoDebarba/rd-compiler)
+
 A simple compiler for my own language writen on Java and [Gals](http://gals.sourceforge.net/) generated code.
 
 *Um compilador simples para minha própria linguagem escrito em Java e código gerado pelo [Gals](http://gals.sourceforge.net/).*
