@@ -3,8 +3,10 @@
 [![Build Status](https://travis-ci.org/RobertoDebarba/rd-compiler.svg?branch=master)](https://travis-ci.org/RobertoDebarba/rd-compiler)
 
 A simple compiler for my own language writen on Java and [Gals](http://gals.sourceforge.net/) generated code.
+It generates [MSIL](https://msdn.microsoft.com/pt-br/library/c5tkafs1(v=vs.90).aspx) code for Microsoft .Net.
 
 *Um compilador simples para minha própria linguagem escrito em Java e código gerado pelo [Gals](http://gals.sourceforge.net/).*
+Ele gera código em [MSIL](https://msdn.microsoft.com/pt-br/library/c5tkafs1(v=vs.90).aspx) para .Net da Microsoft.
 
 ![main](https://github.com/RobertoDebarba/rd-compiler/blob/master/screenshot/main.png)
 
@@ -79,6 +81,25 @@ fim
 ### Test
 
 1. `mvn test`
+
+## How to run programs
+
+### Prerequisites
+
+* [Assembler MSIL](https://msdn.microsoft.com/pt-br/library/496e4ekx(v=vs.80).aspx)
+
+### Build and run code
+
+1. generate code
+1. compile with ilasm `ilasm <program-name>.il`
+1. run on cmd `program-name.exe`
+
+If you want to run on Linux, you can use [Mono](http://www.mono-project.com/):
+
+1. `$ apt install mono-devel`
+1. generate code
+1. compile with mono ilasm `$ ilasm <program-name>.il`
+1. run on shell `mono program-name.exe`
 
 ## Language specification
 
