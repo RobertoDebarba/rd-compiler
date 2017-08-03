@@ -2,13 +2,12 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>br.com.furb</groupId>
-	<artifactId>trabalho-compiladores</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<groupId>br.com.robertodebarba</groupId>
+	<artifactId>rd-compiler</artifactId>
+	<version>1.0</version>
 	<packaging>jar</packaging>
 
-	<name>trabalho-compiladores</name>
-	<url>http://maven.apache.org</url>
+	<name>rd-compiler</name>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -44,7 +43,7 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>br.com.furb.trabalho_compiladores.TrabalhoCompiladores</mainClass>
+							<mainClass>br.com.robertodebarba.rd_compiler.RDCompiler</mainClass>
 						</manifest>
 					</archive>
 					<descriptorRefs>

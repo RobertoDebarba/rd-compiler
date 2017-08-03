@@ -1,7 +1,7 @@
 package gui;
 
-import br.com.furb.trabalho_compiladores.view.CompilerWindow;
-import br.com.furb.trabalho_compiladores.view.CompilerWindowFactory;
+import br.com.robertodebarba.rd_compiler.view.CompilerWindow;
+import br.com.robertodebarba.rd_compiler.view.CompilerWindowFactory;
 import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.fixture.FrameFixture;
 import org.junit.Assert;
